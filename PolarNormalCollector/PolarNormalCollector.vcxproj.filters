@@ -15,7 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PolarNormalCollector.cpp">
+    <ClCompile Include="mail.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PolarImagesAcquistion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PolarImagesProcessing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

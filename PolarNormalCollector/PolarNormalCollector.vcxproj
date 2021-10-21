@@ -140,7 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PolarNormalCollector.cpp" />
+    <ClCompile Include="PolarImagesAcquistion.cpp" />
+    <ClCompile Include="mail.cpp" />
+    <ClCompile Include="PolarImagesProcessing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h" />
