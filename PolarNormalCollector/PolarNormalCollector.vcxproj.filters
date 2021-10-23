@@ -13,21 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="RealSense">
+      <UniqueIdentifier>{9e1527cc-9c74-443a-b6d0-c05903af1843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PolarImages">
+      <UniqueIdentifier>{4391a2d7-6101-4448-bd83-0c025c036379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="mail.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PolarImagesAcquistion.cpp">
-      <Filter>源文件</Filter>
+      <Filter>PolarImages</Filter>
     </ClCompile>
     <ClCompile Include="PolarImagesProcessing.cpp">
-      <Filter>源文件</Filter>
+      <Filter>PolarImages</Filter>
+    </ClCompile>
+    <ClCompile Include="RealSenseAcquisition.cpp">
+      <Filter>RealSense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h">
-      <Filter>头文件</Filter>
+      <Filter>PolarImages</Filter>
+    </ClInclude>
+    <ClInclude Include="RealSenseAcquisition.h">
+      <Filter>RealSense</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -141,11 +141,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PolarImagesAcquistion.cpp" />
-    <ClCompile Include="mail.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="PolarImagesProcessing.cpp" />
+    <ClCompile Include="RealSenseAcquisition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h" />
+    <ClInclude Include="RealSenseAcquisition.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
