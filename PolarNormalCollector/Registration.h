@@ -19,8 +19,8 @@ class Registrar
 public:
 	Registrar();
 	~Registrar();
-	void Process(Mat& polarImg, Mat& rgbImg);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用
-	void CalculateTransform(Mat& polarImg, Mat& rgbImg);//这个函数是用来计算两个图像之间的变换矩阵的，两张图像应包含相同的棋盘格信息
+	void Process(Mat& polarImg);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用，这个函数对输入格式无要求
+	void CalculateTransform(Mat& polarImg, Mat& rgbImg);//这个函数是用来计算两个图像之间的变换矩阵的，两张图像应包含相同的棋盘格信息,注意这里的输入偏振图像必须要转换成CV_8UC1类型
 	void ReadTransform();//从配置文件中读取变换矩阵(后续再加)
 private:
 	//偏振图像分辨率
@@ -34,8 +34,12 @@ private:
 	//用于配准的棋盘格参数
 	Size boardSize;
 	
-	//变换矩阵
-	Mat transformMat; //两张图片间的仿射变换矩阵
+	//棋盘角点号，棋盘的角点选择会很大程度上影响配准效果
+	int pt_0;
+	int pt_1;
+	int pt_2;
+	int pt_3;
+
 public:
 	//画提取到的角点
 	Mat polarCorners;
@@ -43,6 +47,8 @@ public:
 	//配准后的图像
 	Mat registered_poarImg; //配准过的偏振图像
 	Mat registered_rgbImg; //以rgb配准的话这个与输入的rgbImg相等
+
+	Mat transformMat; //两张图片间的仿射变换矩阵
 
 };
 

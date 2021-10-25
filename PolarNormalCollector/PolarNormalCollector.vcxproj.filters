@@ -22,6 +22,9 @@
     <Filter Include="Registration">
       <UniqueIdentifier>{f6ed3896-b29e-4ade-9af1-c1bdcfb894ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{be3bc0a0-5e9b-474b-a823-59d588f3390b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="Registration.h">
       <Filter>Registration</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
