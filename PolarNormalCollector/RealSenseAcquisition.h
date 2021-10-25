@@ -36,7 +36,8 @@ public:
 	Mat raw_depth_mat;  //深度图格式为
 	Mat filtered_depth_mat;
 	Mat raw_rgb_mat;
-	Mat color_depth;
+	Mat color_filtered_depth;
+	Mat color_raw_depth;
 
 private:
 	int width; //分辨率
@@ -58,4 +59,29 @@ private:
 	
 	
 };
+
+//测试代码：
+//AcquireRealSense captcher;
+//std::thread processing_thread([&]()
+//	{
+//
+//		captcher.Processing();
+//
+//	});
+//
+//while (1)
+//{
+//	captcher.GetPictures();
+//	imshow("color_raw_depth", captcher.color_raw_depth);
+//	imshow("color_filtered_depth", captcher.color_filtered_depth);
+//	imshow("raw_rgb", captcher.raw_rgb_mat);
+//	imshow("filtered_depth", captcher.filtered_depth_mat);
+//
+//	Mat syn_img = Mat::zeros(640, 480, CV_8UC3);
+//	addWeighted(captcher.color_filtered_depth, 0.5, captcher.raw_rgb_mat, 0.5, 0.0, syn_img);
+//
+//	imshow("syn", syn_img);
+//
+//	waitKey(0);
+//}
 

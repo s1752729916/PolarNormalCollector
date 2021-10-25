@@ -6,33 +6,25 @@
 #include "PolarImagesAcquistion.h"
 #include <librealsense2/rs.hpp>
 #include "RealSenseAcquisition.h"
+#include "Registration.h"
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 using namespace cv;
 int main(int argc, char* argv[]) 
 {
-    AcquireRealSense captcher;
-    std::thread processing_thread([&]() 
-        {
-         
-                captcher.Processing();
-            
-        });
+    Mat polarImg;
+    Mat rgbImg;
+    Mat polarMat;
+    polarImg = imread("D:\\OneDrive\\OneDrive - mails.tsinghua.edu.cn\\桌面\\偏振相机\\test\\polar_MONO_12bit_Angle_001_Sum.tif",-1);
+    polarImg.convertTo(polarMat,CV_8UC1);
+    rgbImg = imread("D:\\OneDrive\\OneDrive - mails.tsinghua.edu.cn\\桌面\\偏振相机\\test\\Rgb_Color.png", -1);
+    Registrar test;
+    test.CalculateTransform(polarMat,rgbImg);
     
-    while (1)
-    {
-        captcher.GetPictures();
-        imshow("raw_depth", captcher.color_depth);
-        imshow("raw_rgb", captcher.raw_rgb_mat);
-        Mat syn_img = Mat::zeros(640,480, CV_8UC3);
-        addWeighted(captcher.color_depth, 0.5, captcher.raw_rgb_mat, 0.5, 0.0, syn_img);
-
-        imshow("syn", syn_img);
-
-        waitKey(0);
-   }
-
-    
-
-
+    imshow("polarPoints", polarMat);
+    imshow("rgbPoints", test.rgbCorners);
+    waitKey(0);
 
 
     return 0;

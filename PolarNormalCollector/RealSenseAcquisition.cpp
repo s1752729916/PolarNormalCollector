@@ -26,7 +26,7 @@ AcquireRealSense::AcquireRealSense()
 	align_direction = direction::to_color;//对齐到RGB相机
 
 	//-- 3、设置后处理滤波器
-	thr_filter.set_option(RS2_OPTION_MIN_DISTANCE,0.5);//最小距离
+	thr_filter.set_option(RS2_OPTION_MIN_DISTANCE,0.2);//最小距离
 	thr_filter.set_option(RS2_OPTION_MAX_DISTANCE, 4);//最大距离
 
 	//空间滤波器
@@ -44,8 +44,8 @@ AcquireRealSense::AcquireRealSense()
 	raw_depth_mat = Mat::zeros(height,width,CV_16UC1);
 	raw_rgb_mat = Mat::zeros(height, width, CV_8UC3);
 	filtered_depth_mat = Mat::zeros(height, width, CV_16UC1);
-	color_depth = Mat::zeros(height, width, CV_8UC3);
-
+	color_filtered_depth = Mat::zeros(height, width, CV_8UC3);
+	color_raw_depth = Mat::zeros(height, width, CV_8UC3);
 
 	//-- 5、开启后处理
 	isPostProcessingEnabled = true;
@@ -128,9 +128,12 @@ void AcquireRealSense::GetPictures()
  	rs2::frame filtered_depth_frame;
 	try
 	{
+		rs2::colorizer color_map;
 		if (raw_depth_queue.poll_for_frame(&raw_depth_frame))
 		{
 			raw_depth_mat = Frame2Mat(raw_depth_frame).clone();
+			color_raw_depth = Frame2Mat(rs2::depth_frame(raw_depth_frame).apply_filter(color_map)).clone();
+
 		}
 		if (raw_rgb_queue.poll_for_frame(&raw_rgb_frame))
 		{
@@ -141,8 +144,7 @@ void AcquireRealSense::GetPictures()
 		{
 			filtered_depth_mat = Frame2Mat(filtered_depth_frame).clone(); //单位应该是mm
 
-			rs2::colorizer color_map;
-			color_depth = Frame2Mat(rs2::depth_frame(filtered_depth_frame).apply_filter(color_map)).clone();
+			color_filtered_depth = Frame2Mat(rs2::depth_frame(filtered_depth_frame).apply_filter(color_map)).clone();
 		}
 	}
 	catch (const rs2::error& e)

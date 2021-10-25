@@ -19,6 +19,9 @@
     <Filter Include="PolarImages">
       <UniqueIdentifier>{4391a2d7-6101-4448-bd83-0c025c036379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Registration">
+      <UniqueIdentifier>{f6ed3896-b29e-4ade-9af1-c1bdcfb894ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,6 +36,9 @@
     <ClCompile Include="RealSenseAcquisition.cpp">
       <Filter>RealSense</Filter>
     </ClCompile>
+    <ClCompile Include="Registration.cpp">
+      <Filter>Registration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h">
@@ -40,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="RealSenseAcquisition.h">
       <Filter>RealSense</Filter>
+    </ClInclude>
+    <ClInclude Include="Registration.h">
+      <Filter>Registration</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
