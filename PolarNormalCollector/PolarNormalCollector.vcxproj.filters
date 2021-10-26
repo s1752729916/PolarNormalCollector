@@ -31,6 +31,12 @@
     <Filter Include="Displayer">
       <UniqueIdentifier>{8409e5f4-ec20-4fe6-86c2-9c6cd5475ada}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form">
+      <UniqueIdentifier>{29e48fd8-5451-4578-b79a-df5784c183d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GeneratedFiles">
+      <UniqueIdentifier>{1589ac65-a2d8-45cd-8335-cc7614c0d110}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="FrameManager.cpp">
       <Filter>FrameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\moc_MainWindow.cpp">
+      <Filter>GeneratedFiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,5 +83,16 @@
     <ClInclude Include="Displayer.h">
       <Filter>Displayer</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
+      <Filter>GeneratedFiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="MainWindow.ui">
+      <Filter>Form</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Form</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

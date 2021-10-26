@@ -12,11 +12,19 @@
 #include <opencv2/imgproc.hpp>
 #include "utils.h"
 #include "FrameManager.h"
+
+#include "MainWindow.h"
+#include <QtWidgets/qapplication.h>
+
 using namespace cv;
+
 int main(int argc, char* argv[]) 
 {
-    FrameManager a;
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
 
 
-    return 0;
+
+    return a.exec();
 }
