@@ -33,24 +33,27 @@ public:
     QGroupBox *group_display;
     QGridLayout *gridLayout_3;
     QGridLayout *gridLayout_2;
-    QSpacerItem *horizontalSpacer_7;
-    QLabel *label_8;
-    QSpacerItem *horizontalSpacer_3;
-    QLabel *label_AoLP;
     QLabel *label_12;
-    QLabel *label_DoLP;
-    QSpacerItem *horizontalSpacer_4;
-    QSpacerItem *horizontalSpacer_6;
+    QLabel *label_3;
     QLabel *label_RGB;
-    QLabel *label_Depth;
+    QSpacerItem *horizontalSpacer_3;
+    QLabel *label_8;
     QLabel *label_11;
-    QLabel *label_7;
-    QLabel *label_9;
+    QLabel *label_Depth;
     QLabel *label_Intensity;
-    QLabel *label_10;
-    QSpacerItem *horizontalSpacer_5;
-    QLabel *label_Normal;
     QSpacerItem *horizontalSpacer_8;
+    QLabel *label_colorDepth;
+    QSpacerItem *horizontalSpacer_4;
+    QLabel *label_DoLP;
+    QLabel *label_10;
+    QLabel *label;
+    QLabel *label_9;
+    QLabel *label_AoLP;
+    QLabel *label_Intensity_bright;
+    QLabel *label_Normal;
+    QSpacerItem *horizontalSpacer_7;
+    QLabel *label_7;
+    QSpacerItem *horizontalSpacer_9;
     QVBoxLayout *verticalLayout_2;
     QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout_2;
@@ -68,7 +71,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(2061, 1270);
+        MainWindow->resize(2668, 1249);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -80,45 +83,17 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        horizontalSpacer_7 = new QSpacerItem(10, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_7, 1, 0, 1, 1);
-
-        label_8 = new QLabel(group_display);
-        label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setAlignment(Qt::AlignCenter);
-
-        gridLayout_2->addWidget(label_8, 0, 1, 1, 1);
-
-        horizontalSpacer_3 = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_3, 1, 2, 1, 1);
-
-        label_AoLP = new QLabel(group_display);
-        label_AoLP->setObjectName(QString::fromUtf8("label_AoLP"));
-        label_AoLP->setMinimumSize(QSize(640, 480));
-
-        gridLayout_2->addWidget(label_AoLP, 1, 5, 1, 1);
-
         label_12 = new QLabel(group_display);
         label_12->setObjectName(QString::fromUtf8("label_12"));
         label_12->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addWidget(label_12, 0, 5, 1, 1);
+        gridLayout_2->addWidget(label_12, 0, 7, 1, 1);
 
-        label_DoLP = new QLabel(group_display);
-        label_DoLP->setObjectName(QString::fromUtf8("label_DoLP"));
-        label_DoLP->setMinimumSize(QSize(640, 480));
+        label_3 = new QLabel(group_display);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addWidget(label_DoLP, 1, 3, 1, 1);
-
-        horizontalSpacer_4 = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_4, 1, 4, 1, 1);
-
-        horizontalSpacer_6 = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_6, 3, 4, 1, 1);
+        gridLayout_2->addWidget(label_3, 2, 3, 1, 1);
 
         label_RGB = new QLabel(group_display);
         label_RGB->setObjectName(QString::fromUtf8("label_RGB"));
@@ -126,30 +101,27 @@ public:
 
         gridLayout_2->addWidget(label_RGB, 3, 1, 1, 1);
 
-        label_Depth = new QLabel(group_display);
-        label_Depth->setObjectName(QString::fromUtf8("label_Depth"));
-        label_Depth->setMinimumSize(QSize(640, 480));
+        horizontalSpacer_3 = new QSpacerItem(5, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-        gridLayout_2->addWidget(label_Depth, 3, 3, 1, 1);
+        gridLayout_2->addItem(horizontalSpacer_3, 1, 2, 1, 1);
+
+        label_8 = new QLabel(group_display);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+        label_8->setAlignment(Qt::AlignCenter);
+
+        gridLayout_2->addWidget(label_8, 0, 1, 1, 1);
 
         label_11 = new QLabel(group_display);
         label_11->setObjectName(QString::fromUtf8("label_11"));
         label_11->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addWidget(label_11, 0, 3, 1, 1);
+        gridLayout_2->addWidget(label_11, 0, 5, 1, 1);
 
-        label_7 = new QLabel(group_display);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setAlignment(Qt::AlignCenter);
+        label_Depth = new QLabel(group_display);
+        label_Depth->setObjectName(QString::fromUtf8("label_Depth"));
+        label_Depth->setMinimumSize(QSize(640, 480));
 
-        gridLayout_2->addWidget(label_7, 2, 1, 1, 1);
-
-        label_9 = new QLabel(group_display);
-        label_9->setObjectName(QString::fromUtf8("label_9"));
-        label_9->setTextFormat(Qt::RichText);
-        label_9->setAlignment(Qt::AlignCenter);
-
-        gridLayout_2->addWidget(label_9, 2, 3, 1, 1);
+        gridLayout_2->addWidget(label_Depth, 3, 5, 1, 1);
 
         label_Intensity = new QLabel(group_display);
         label_Intensity->setObjectName(QString::fromUtf8("label_Intensity"));
@@ -157,25 +129,75 @@ public:
 
         gridLayout_2->addWidget(label_Intensity, 1, 1, 1, 1);
 
+        horizontalSpacer_8 = new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_8, 1, 8, 1, 1);
+
+        label_colorDepth = new QLabel(group_display);
+        label_colorDepth->setObjectName(QString::fromUtf8("label_colorDepth"));
+
+        gridLayout_2->addWidget(label_colorDepth, 3, 3, 1, 1);
+
+        horizontalSpacer_4 = new QSpacerItem(5, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_4, 1, 6, 1, 1);
+
+        label_DoLP = new QLabel(group_display);
+        label_DoLP->setObjectName(QString::fromUtf8("label_DoLP"));
+        label_DoLP->setMinimumSize(QSize(640, 480));
+
+        gridLayout_2->addWidget(label_DoLP, 1, 5, 1, 1);
+
         label_10 = new QLabel(group_display);
         label_10->setObjectName(QString::fromUtf8("label_10"));
         label_10->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addWidget(label_10, 2, 5, 1, 1);
+        gridLayout_2->addWidget(label_10, 2, 7, 1, 1);
 
-        horizontalSpacer_5 = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        label = new QLabel(group_display);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addItem(horizontalSpacer_5, 3, 2, 1, 1);
+        gridLayout_2->addWidget(label, 0, 3, 1, 1);
+
+        label_9 = new QLabel(group_display);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+        label_9->setTextFormat(Qt::RichText);
+        label_9->setAlignment(Qt::AlignCenter);
+
+        gridLayout_2->addWidget(label_9, 2, 5, 1, 1);
+
+        label_AoLP = new QLabel(group_display);
+        label_AoLP->setObjectName(QString::fromUtf8("label_AoLP"));
+        label_AoLP->setMinimumSize(QSize(640, 480));
+
+        gridLayout_2->addWidget(label_AoLP, 1, 7, 1, 1);
+
+        label_Intensity_bright = new QLabel(group_display);
+        label_Intensity_bright->setObjectName(QString::fromUtf8("label_Intensity_bright"));
+        label_Intensity_bright->setMinimumSize(QSize(640, 480));
+
+        gridLayout_2->addWidget(label_Intensity_bright, 1, 3, 1, 1);
 
         label_Normal = new QLabel(group_display);
         label_Normal->setObjectName(QString::fromUtf8("label_Normal"));
         label_Normal->setMinimumSize(QSize(640, 480));
 
-        gridLayout_2->addWidget(label_Normal, 3, 5, 1, 1);
+        gridLayout_2->addWidget(label_Normal, 3, 7, 1, 1);
 
-        horizontalSpacer_8 = new QSpacerItem(10, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_7 = new QSpacerItem(10, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_2->addItem(horizontalSpacer_8, 1, 6, 1, 1);
+        gridLayout_2->addItem(horizontalSpacer_7, 1, 0, 1, 1);
+
+        label_7 = new QLabel(group_display);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setAlignment(Qt::AlignCenter);
+
+        gridLayout_2->addWidget(label_7, 2, 1, 1, 1);
+
+        horizontalSpacer_9 = new QSpacerItem(5, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_9, 1, 4, 1, 1);
 
 
         gridLayout_3->addLayout(gridLayout_2, 0, 0, 1, 1);
@@ -242,7 +264,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 2061, 23));
+        menubar->setGeometry(QRect(0, 0, 2668, 23));
         MainWindow->setMenuBar(menubar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -257,18 +279,22 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         group_display->setTitle(QApplication::translate("MainWindow", "Display", nullptr));
-        label_8->setText(QApplication::translate("MainWindow", "Intensity", nullptr));
-        label_AoLP->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
         label_12->setText(QApplication::translate("MainWindow", "AoLP", nullptr));
-        label_DoLP->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_3->setText(QApplication::translate("MainWindow", "Color Depth", nullptr));
         label_RGB->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
-        label_Depth->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_8->setText(QApplication::translate("MainWindow", "Intensity", nullptr));
         label_11->setText(QApplication::translate("MainWindow", "DoLP", nullptr));
-        label_7->setText(QApplication::translate("MainWindow", "RGB", nullptr));
-        label_9->setText(QApplication::translate("MainWindow", "Depth", nullptr));
+        label_Depth->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
         label_Intensity->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_colorDepth->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_DoLP->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
         label_10->setText(QApplication::translate("MainWindow", "Normal", nullptr));
+        label->setText(QApplication::translate("MainWindow", "Bright Intensity", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "Depth", nullptr));
+        label_AoLP->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_Intensity_bright->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
         label_Normal->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_7->setText(QApplication::translate("MainWindow", "RGB", nullptr));
         group_control->setTitle(QApplication::translate("MainWindow", "Control", nullptr));
         btn_processing->setText(QApplication::translate("MainWindow", "Processing", nullptr));
         btn_freeze->setText(QApplication::translate("MainWindow", "Freeze", nullptr));

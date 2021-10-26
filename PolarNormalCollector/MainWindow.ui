@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2061</width>
-    <height>1270</height>
+    <width>2668</width>
+    <height>1249</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,14 +29,50 @@
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_7">
+         <item row="0" column="7">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>AoLP</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Color Depth</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_RGB">
+           <property name="minimumSize">
+            <size>
+             <width>640</width>
+             <height>480</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <spacer name="horizontalSpacer_3">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>10</width>
+             <width>5</width>
              <height>20</height>
             </size>
            </property>
@@ -52,117 +88,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="5">
-          <widget class="QLabel" name="label_AoLP">
-           <property name="minimumSize">
-            <size>
-             <width>640</width>
-             <height>480</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="5">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>AoLP</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QLabel" name="label_DoLP">
-           <property name="minimumSize">
-            <size>
-             <width>640</width>
-             <height>480</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="4">
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="3" column="4">
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="label_RGB">
-           <property name="minimumSize">
-            <size>
-             <width>640</width>
-             <height>480</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="3">
-          <widget class="QLabel" name="label_Depth">
-           <property name="minimumSize">
-            <size>
-             <width>640</width>
-             <height>480</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>DoLP</string>
@@ -172,26 +98,16 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="label_7">
+         <item row="3" column="5">
+          <widget class="QLabel" name="label_Depth">
+           <property name="minimumSize">
+            <size>
+             <width>640</width>
+             <height>480</height>
+            </size>
+           </property>
            <property name="text">
-            <string>RGB</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Depth</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::RichText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
@@ -208,7 +124,56 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="5">
+         <item row="1" column="8">
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="3">
+          <widget class="QLabel" name="label_colorDepth">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="6">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>5</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="5">
+          <widget class="QLabel" name="label_DoLP">
+           <property name="minimumSize">
+            <size>
+             <width>640</width>
+             <height>480</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="7">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Normal</string>
@@ -218,23 +183,56 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="2">
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="0" column="3">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Bright Intensity</string>
            </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
-           <property name="sizeHint" stdset="0">
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Depth</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="7">
+          <widget class="QLabel" name="label_AoLP">
+           <property name="minimumSize">
             <size>
-             <width>10</width>
-             <height>20</height>
+             <width>640</width>
+             <height>480</height>
             </size>
            </property>
-          </spacer>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
          </item>
-         <item row="3" column="5">
+         <item row="1" column="3">
+          <widget class="QLabel" name="label_Intensity_bright">
+           <property name="minimumSize">
+            <size>
+             <width>640</width>
+             <height>480</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="7">
           <widget class="QLabel" name="label_Normal">
            <property name="minimumSize">
             <size>
@@ -247,15 +245,41 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="6">
-          <spacer name="horizontalSpacer_8">
+         <item row="1" column="0">
+          <spacer name="horizontalSpacer_7">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
              <width>10</width>
-             <height>0</height>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>RGB</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>5</width>
+             <height>20</height>
             </size>
            </property>
           </spacer>
@@ -385,7 +409,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>2061</width>
+     <width>2668</width>
      <height>23</height>
     </rect>
    </property>

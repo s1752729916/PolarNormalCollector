@@ -18,7 +18,7 @@ FrameManager::FrameManager()
 	pPolarAcquirer = new AcquirePolarImages;
 	pRealSenseAcquirer = new AcquireRealSense;
 	pRegistrar = new Registrar;
-	//pDisplayer = new Displayer;
+	pDisplayer = new Displayer;
 	
 	//设置参数
 	isProcessingEnabled = true;
@@ -43,22 +43,41 @@ void FrameManager::Processing()
 	//读取极化图像并进行后处理
 	pPolarAcquirer->ReadPolarImages();
 	pPolarAcquirer->PostProcessing();
-	I_sum = pPolarAcquirer->I_sum; //因为这个类里的Mat是单独开的内存，所以不需要再clone开内存了
-	I_0 = pPolarAcquirer->I_0;
-	I_45 = pPolarAcquirer->I_45;
-	I_90 = pPolarAcquirer->I_90;
-	I_135 = pPolarAcquirer->I_135;
-	AoLP = pPolarAcquirer->AoLP;
-	DoLP = pPolarAcquirer->DoLP;
 
 	//读取RealSense图像
 	pRealSenseAcquirer->GetPictures();
+
+	
+
+	//配准操作
+	pRegistrar->Process(pPolarAcquirer->I_sum);
+	I_sum = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->I_0);
+	I_0 = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->I_45);
+	I_45 = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->I_90);
+	I_90 = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->I_135);
+	I_135 = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->AoLP);
+	AoLP = pRegistrar->registered_poarImg.clone();
+
+	pRegistrar->Process(pPolarAcquirer->DoLP);
+	DoLP = pRegistrar->registered_poarImg.clone();
+
 	rgb = pRealSenseAcquirer->raw_rgb_mat;
 	depth = pRealSenseAcquirer->filtered_depth_mat;
 	colorDepth = pRealSenseAcquirer->color_filtered_depth;
 	normal = pRealSenseAcquirer->color_filtered_depth;//TODO：法线还未实现
 
 	//Displayer操作...
+	pDisplayer->Display(I_sum,DoLP,AoLP,rgb,depth,colorDepth,normal);
 	
 	
 }
@@ -89,5 +108,5 @@ FrameManager::~FrameManager()
 	delete pPolarAcquirer;
 	delete pRealSenseAcquirer;
 	delete pRegistrar;
-	//delete pDisplayer;
+	delete pDisplayer;
 }

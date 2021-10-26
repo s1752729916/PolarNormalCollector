@@ -63,6 +63,15 @@
     <ClCompile Include="GeneratedFiles\moc_MainWindow.cpp">
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
+    <ClCompile Include="cv2qt.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\moc_Displayer.cpp">
+      <Filter>GeneratedFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h">
@@ -80,11 +89,11 @@
     <ClInclude Include="FrameManager.h">
       <Filter>FrameManager</Filter>
     </ClInclude>
-    <ClInclude Include="Displayer.h">
-      <Filter>Displayer</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
       <Filter>GeneratedFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cv2qt.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +102,9 @@
     </CustomBuild>
     <CustomBuild Include="MainWindow.h">
       <Filter>Form</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Displayer.h">
+      <Filter>Displayer</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

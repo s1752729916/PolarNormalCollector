@@ -16,7 +16,7 @@ Description:
 #include "PolarImagesAcquistion.h"
 #include "RealSenseAcquisition.h"
 #include "Registration.h"
-
+#include "Displayer.h"
 class FrameManager
 {
 public:
@@ -41,7 +41,7 @@ private:
 	AcquirePolarImages* pPolarAcquirer;
 	AcquireRealSense* pRealSenseAcquirer;
 	Registrar* pRegistrar;
-	//Displayer* pDisplayer;//TODO: Displayer
+	Displayer* pDisplayer;
 
 private:
 	//视频流中的各图像缓存区

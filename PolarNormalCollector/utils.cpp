@@ -1,0 +1,34 @@
+#include "utils.h"
+Mat CV_16UC1ToCV_8UC1(Mat& input)
+{
+	//保证亮度不变的格式转换
+	if (input.type() != CV_16UC1)
+	{
+		printf_s("utils::CV_16UC1ToCV_8UC1 input type is not CV_16UC1\n");
+		return input;
+	}
+
+	Mat out;
+	out = input / 257;
+	out.convertTo(out, CV_8UC1);
+
+
+	//返回函数内部定义的Mat是可行的
+	//Mat由计数器来控制释放与否，因此函数结束后不会清除函数内部定义的Mat
+	return out;
+
+}
+Mat CV_8UC1ToCU_16UC1(Mat& input)
+{
+	//保证亮度不变的格式转换
+	if (input.type() != CV_8UC1)
+	{
+		printf_s("utils::CV_8UC1ToCU_16UC1 input type is not CV_8UC1\n");
+		return input;
+	}
+	Mat out;
+	input.convertTo(out, CV_16UC1);
+	out = out * 257;//先转换格式再乘倍数，数值不会溢出
+	return out;
+}
+

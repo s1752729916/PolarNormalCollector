@@ -1,20 +1,59 @@
-/**************************************************************************
+ï»¿/**************************************************************************
 
 Author: SMQ
 
 Date:2021-10-25
 
 Description:
-¸ÃÀàÓÃÓÚÏÔÊ¾Í¼Ïñ£¬Ó¦°üº¬½Ó¿Ú::Display
-
-¸ÃÀà¹²ÓĞËÄ¸öÖ÷Òªº¯Êı£º
-1¡¢RegistrationInit()//ÓÃÓÚ¼ÆËãÍ¸ÊÓ¾ØÕó£¬¸Ãº¯ÊıĞèÓëFreeze()ÅäºÏÊ¹ÓÃ
-2¡¢Processing()Íê³É¶ÁÈ¡ºÍÅä×¼ÈÎÎñÒÔ¼°ÏÔÊ¾½Ó¿ÚµÄÊä³öÈı¸ö×ÓÈÎÎñ£¬¸Ãº¯ÊıÓ¦µ±ÔËĞĞÔÚ¶ÀÁ¢µÄÏß³ÌÖĞ£¬ÓÉ¸÷±êÖ¾Î»¿ØÖÆ¸÷×ÓÈÎÎñµÄ´¦ÀíÓë·ñ
-3¡¢Freeze() ¶³½áµ±Ç°Ö¡£¬Í¨¹ıÉèÖÃ±êÖ¾Î»À´ÔİÍ£Processing()ÖĞ¸÷¸ö×ÓÈÎÎñµÄÔËĞĞ£¬²¢±£´æµ±Ç°Ö¡µÄ×´Ì¬
-4¡¢Capture() Ö÷ÒªÊÇÍê³É±£´æµÈ¹¤×÷£¬ĞèÒªÓëFreeze()ÅäºÏ
+è¯¥ç±»ç”¨äºæ˜¾ç¤ºå›¾åƒï¼Œåº”åŒ…å«æ¥å£::Display
+å‘ä¸‹ä¸FrameManagerè¿›è¡Œé€šä¿¡ï¼Œå‘ä¸Šä¸Qtè¿›è¡Œé€šä¿¡
 **************************************************************************/
-
-class Displayer
+#include <QtCore/qobject.h>
+#include <opencv2/opencv.hpp>
+#include "cv2qt.h"
+#include "utils.h"
+using namespace cv;
+class Displayer: public QObject
 {
+	Q_OBJECT
+signals:
+	void displayImgs(); 
+
+public:
+	void Display(Mat& Intensity, Mat&DoLP, Mat& AoLP, Mat&RGB, Mat&Depth,Mat& colorDepth, Mat& Normal)
+	{
+		//è¿™ä¸ªå‡½æ•°é‡ŒæŠŠMatç±»å‹è½¬æˆQtä¸­èƒ½æ˜¾ç¤ºçš„QImage
+		//Polarè¿‡æ¥çš„å›¾åƒå…¨éƒ¨ä¸º16ä½çš„ï¼Œä½†Qtæ— æ³•æ˜¾ç¤º16ä½å›¾ç‰‡ï¼Œæ‰€ä»¥åœ¨è½¬æˆQImageå‰å…ˆå…¨éƒ¨è½¬æ¢æˆ8ä½
+		CV2Qt converter;
+		Intensity_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC1(Intensity));
+		Mat bright;
+		Intensity.convertTo(bright,CV_8UC1);
+		Intensity_bright_qt = converter.cvMatToQImage(bright);
+
+		DoLP_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC1(DoLP));
+		AoLP_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC1(AoLP));
+
+		//RealSenseçš„å›¾åƒéƒ½æ˜¯8ä½ï¼Œä¸éœ€è¦å†è½¬æ¢äº†
+		RGB_qt = converter.cvMatToQImage(RGB);
+		Depth_qt = converter.cvMatToQImage(Depth);
+		colorDepth_pt = converter.cvMatToQImage(colorDepth);
+		Normal_qt = converter.cvMatToQImage(Normal);
+
+
+		//è½¬æ¢å®Œæˆï¼Œå‘é€ä¿¡å·è¿›è¡Œæ˜¾ç¤º
+
+		emit displayImgs();
+	}
+private:
+	QImage Intensity_qt;
+	QImage Intensity_bright_qt;
+	QImage DoLP_qt;
+	QImage AoLP_qt;
+	QImage RGB_qt;
+	QImage Depth_qt;
+	QImage colorDepth_pt;
+	QImage Normal_qt;
+
+
 
 };

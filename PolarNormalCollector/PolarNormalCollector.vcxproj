@@ -140,7 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cv2qt.cpp" />
     <ClCompile Include="FrameManager.cpp" />
+    <ClCompile Include="GeneratedFiles\moc_Displayer.cpp" />
     <ClCompile Include="GeneratedFiles\moc_MainWindow.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="PolarImagesAcquistion.cpp" />
@@ -148,9 +150,17 @@
     <ClCompile Include="PolarImagesProcessing.cpp" />
     <ClCompile Include="RealSenseAcquisition.cpp" />
     <ClCompile Include="Registration.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Displayer.h" />
+    <ClInclude Include="cv2qt.h" />
+    <CustomBuild Include="Displayer.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe" "%(FullPath)" -o ".\GeneratedFiles\moc_%(Filename).cpp"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</VerifyInputsAndOutputsExist>
+    </CustomBuild>
     <ClInclude Include="FrameManager.h" />
     <CustomBuild Include="MainWindow.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing %(Identity)... </Message>
