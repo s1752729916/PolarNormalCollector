@@ -42,19 +42,4 @@ Mat CV_8UC1ToCU_16UC1(Mat& input)
 	out = out * 257;//先转换格式再乘倍数，数值不会溢出
 	return out;
 }
-Mat CV_8UC1_Brighter(Mat& input)
-{
-	//对CV_8UC1的图像进行加亮处理:即把min-max缩放到0到255范围内
-	if (input.type() != CV_8UC1)
-	{
-		printf_s("utils::CV_8UC1_Brighter input type is not CV_8UC1\n");
-		return input;
-	}
 
-	Mat out;
-	
-	normalize(input,out,0,255,NORM_MINMAX);
-
-
-	return out;
-}

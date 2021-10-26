@@ -21,7 +21,7 @@ public:
 	void ReadPolarImages();
 	void OpenShareMemory();//构造函数中调用
 	void CloseShareMemory();//析构函数中调用
-	void Processing();
+	void PostProcessing();
 
 	
 public:

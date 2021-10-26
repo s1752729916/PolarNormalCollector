@@ -25,6 +25,12 @@
     <Filter Include="utils">
       <UniqueIdentifier>{be3bc0a0-5e9b-474b-a823-59d588f3390b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrameManager">
+      <UniqueIdentifier>{ac2e9dc3-8813-43ae-adff-e0082e2e088b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Displayer">
+      <UniqueIdentifier>{8409e5f4-ec20-4fe6-86c2-9c6cd5475ada}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="Registration.cpp">
       <Filter>Registration</Filter>
     </ClCompile>
+    <ClCompile Include="FrameManager.cpp">
+      <Filter>FrameManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h">
@@ -55,6 +64,12 @@
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameManager.h">
+      <Filter>FrameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Displayer.h">
+      <Filter>Displayer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

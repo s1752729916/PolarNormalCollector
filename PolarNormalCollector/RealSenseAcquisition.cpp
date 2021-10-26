@@ -49,6 +49,14 @@ AcquireRealSense::AcquireRealSense()
 
 	//-- 5、开启后处理
 	isPostProcessingEnabled = true;
+
+	//-- 6、开启PipeLine
+	std::thread processing_thread([&]()
+	{
+
+		Processing();
+
+	});
 }
 
 AcquireRealSense::~AcquireRealSense()
@@ -113,6 +121,8 @@ void AcquireRealSense::Processing()
 		filtered_depth_queue.enqueue(depth_filtered);
 		raw_depth_queue.enqueue(raw_depth);
 		raw_rgb_queue.enqueue(raw_rgb);
+
+		
 		
 
 	}

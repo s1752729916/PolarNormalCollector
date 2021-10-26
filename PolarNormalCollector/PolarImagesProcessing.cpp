@@ -13,7 +13,7 @@ Description:
 inline double to_degrees(double radians) {
 	return radians * (180.0 / 3.1415926535);
 }
-void AcquirePolarImages::Processing()
+void AcquirePolarImages::PostProcessing()
 {
 	INT32 s1, s2;
 	S_0 = I_sum * 2;

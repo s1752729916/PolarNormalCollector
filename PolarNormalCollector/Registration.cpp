@@ -32,6 +32,9 @@ Registrar::Registrar()
 	pt_1 = 9;
 	pt_2 = 25;
 	pt_3 = 43;
+
+	//初始化透视变换矩阵(单位阵)
+	transformMat = Mat::eye(Size(3,3),CV_64F);
 }
 Registrar::~Registrar()
 {

@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="PolarImagesAcquistion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PolarImagesProcessing.cpp" />
@@ -147,6 +148,8 @@
     <ClCompile Include="Registration.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Displayer.h" />
+    <ClInclude Include="FrameManager.h" />
     <ClInclude Include="PolarImagesAcquistion.h" />
     <ClInclude Include="RealSenseAcquisition.h" />
     <ClInclude Include="Registration.h" />
