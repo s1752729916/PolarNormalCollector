@@ -13,6 +13,8 @@ Description:
 3、Freeze() 冻结当前帧，通过设置标志位来暂停Processing()中各个子任务的运行，并保存当前帧的状态
 4、Capture() 主要是完成保存等工作，需要与Freeze()配合
 **************************************************************************/
+#ifndef FrameManager_H
+#define FrameManager_H
 #include "PolarImagesAcquistion.h"
 #include "RealSenseAcquisition.h"
 #include "Registration.h"
@@ -41,6 +43,7 @@ private:
 	AcquirePolarImages* pPolarAcquirer;
 	AcquireRealSense* pRealSenseAcquirer;
 	Registrar* pRegistrar;
+public://需要暴露给MainWindows连接信号槽
 	Displayer* pDisplayer;
 
 private:
@@ -84,3 +87,5 @@ private:
 	Mat normal_capture;
 
 };
+
+#endif 

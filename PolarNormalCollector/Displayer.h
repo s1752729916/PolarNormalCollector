@@ -8,6 +8,8 @@ Description:
 该类用于显示图像，应包含接口::Display
 向下与FrameManager进行通信，向上与Qt进行通信
 **************************************************************************/
+#ifndef Displayer_H
+#define Displayer_H
 #include <QtCore/qobject.h>
 #include <opencv2/opencv.hpp>
 #include "cv2qt.h"
@@ -44,7 +46,7 @@ public:
 
 		emit displayImgs();
 	}
-private:
+public: //需要暴露给槽函数
 	QImage Intensity_qt;
 	QImage Intensity_bright_qt;
 	QImage DoLP_qt;
@@ -57,3 +59,4 @@ private:
 
 
 };
+#endif Displayer_H

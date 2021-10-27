@@ -3,6 +3,48 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+    //初始化
+    pFrameManager = new FrameManager;
     
+    //初始化信号槽
+    InitConnects();
+}
+
+void MainWindow::InitConnects()
+{
+    connect(pFrameManager->pDisplayer, &Displayer::displayImgs, [&]()
+        {
+            //在这个域里可以以引用的方式使用MainWindows作用于的变量
+            //通过this->pFrameManager->Displayer->Imgs来得到所有需要的图像
+            
+
+            ui.label_Intensity->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Intensity_qt));
+            ui.label_Intensity->show();
+
+            ui.label_Intensity_bright->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Intensity_bright_qt));
+            ui.label_Intensity_bright->show();
+
+            ui.label_AoLP->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->AoLP_qt));
+            ui.label_AoLP->show();
+
+            ui.label_DoLP->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Depth_qt));
+            ui.label_DoLP->show();
+
+            ui.label_RGB->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->RGB_qt));
+            ui.label_RGB->show();
+
+            ui.label_Depth->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Depth_qt));
+            ui.label_Depth->show();
+
+            ui.label_colorDepth->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->colorDepth_pt));
+            ui.label_colorDepth->show();
+
+            ui.label_Normal->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Normal_qt));
+            ui.label_Normal->show();
+
+        }
+    );
+
 }
 
