@@ -32,6 +32,17 @@ QImage  CV2Qt::cvMatToQImage(const cv::Mat& inMat)
 
         return image.rgbSwapped();
     }
+    case CV_16UC1:
+    {
+        cv::Mat temp;
+        inMat.convertTo(temp,CV_8UC1);
+        QImage image(temp.data,
+            temp.cols, temp.rows,
+            static_cast<int>(temp.step),
+            QImage::Format_Grayscale8);//Format_Alpha8 and Format_Grayscale8 were added in Qt 5.5
+        return image;
+    }
+
 
     // 8-bit, 1 channel
     case CV_8UC1:

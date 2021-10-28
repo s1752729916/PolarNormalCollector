@@ -23,7 +23,7 @@ AcquirePolarImages::AcquirePolarImages()
 	S_2 = cv::Mat::zeros(height, width, CV_16UC1);
 	AoLP = cv::Mat::zeros(height, width, CV_32FC1);
 	DoLP = cv::Mat::zeros(height, width, CV_32FC1);
-
+	
 }
 AcquirePolarImages::~AcquirePolarImages()
 {

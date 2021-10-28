@@ -51,76 +51,107 @@ AcquireRealSense::AcquireRealSense()
 	isPostProcessingEnabled = true;
 
 	//-- 6、开启PipeLine
-	std::thread processing_thread([&]()
-	{
-
-		Processing();
-
-	});
-}
-
-AcquireRealSense::~AcquireRealSense()
-{
-	pipe.stop();
-}
-void AcquireRealSense::Processing()
-{
-	//打开pipeline，等待帧集到来
 	try
 	{
+		printf_s("[<-] AcquireRealSense Pipeline starting...\n");
 		pipe.start(cfg);
+		printf_s("[+] AcquireRealSense Pipeline start succeed!\n");
 	}
 	catch (const rs2::error& e)
 	{
-		std::cerr << "[-] AcquireRealSense::Processing Error: RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
+		std::cerr << "[-] AcquireRealSense::AcquireRealSense Error: RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
 		return;
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr <<"[-] AcquireRealSense::Processing Exception: " << e.what() << std::endl;
-		return ;
+		std::cerr << "[-] AcquireRealSense::AcquireRealSense Exception: " << e.what() << std::endl;
+		return;
 	}
+
+
+
+}
+
+AcquireRealSense::~AcquireRealSense()
+{
+	printf_s("[<-] Pipeline stoping...\n");
+	pipe.stop();
+	printf_s("[+] Pipeline stop succeed!\n");
+}
+void AcquireRealSense::start()
+{
+	//开启线程函数
+	processing_thread = std::thread(&AcquireRealSense::Processing, this);
+}
+void AcquireRealSense::Processing()
+{
+
 	
 	printf_s("[+] AcquireRealSense::Processing pipeline started succeed\n");
+	rs2::align align_to_depth(RS2_STREAM_DEPTH);
+	rs2::align align_to_color(RS2_STREAM_COLOR);
 	while (1)
 	{
 		//从相机获取帧
-		rs2::frameset frames = pipe.wait_for_frames();
+		try
+		{
+			rs2::frameset frames = pipe.wait_for_frames();
+			if (frames.get_frame_number() < 1)
+			{
+				//相机还没准备好，稍等再来
+				continue;
+			}
 
-		//相机对齐
-		rs2::align align_to_depth(RS2_STREAM_DEPTH);
-		rs2::align align_to_color(RS2_STREAM_COLOR);
-		if (align_direction == direction::to_depth)
-		{
-			// Align all frames to depth viewport
-			frames = align_to_depth.process(frames);
-		}
-		else
-		{
-			// Align all frames to color viewport
-			frames = align_to_color.process(frames);
-		}
-		//获取帧
+			//相机对齐
+;
+			if (align_direction == direction::to_depth)
+			{
+				// Align all frames to depth viewport
+				frames = align_to_depth.process(frames);
+			}
+			else
+			{
+				// Align all frames to color viewport
+				frames = align_to_color.process(frames);
+			}
+			//获取帧
 
-		rs2::depth_frame raw_depth = frames.get_depth_frame();
-		rs2::frame raw_rgb = frames.get_color_frame();
-		if (!raw_depth)
-			continue;
-		rs2::frame depth_filtered = raw_depth; // Does not copy the frame, only adds a reference
-		
-		//后处理滤波器
-		if (isPostProcessingEnabled)
-		{
-			depth_filtered = thr_filter.process(depth_filtered);
-			depth_filtered = spat_filter.process(depth_filtered);
-			depth_filtered = temp_filter.process(depth_filtered);
+			rs2::depth_frame raw_depth = frames.get_depth_frame();
+			rs2::frame raw_rgb = frames.get_color_frame();
+			if (!raw_depth)
+				continue;
+			if (!raw_rgb)
+				continue;
+			rs2::frame depth_filtered = raw_depth; // Does not copy the frame, only adds a reference
+
+			//后处理滤波器
+			if (isPostProcessingEnabled)
+			{
+				depth_filtered = thr_filter.process(depth_filtered);
+				depth_filtered = spat_filter.process(depth_filtered);
+				depth_filtered = temp_filter.process(depth_filtered);
+
+				filtered_depth_queue.enqueue(depth_filtered);
+			}
+
+
+			//将三幅图像都加入到队列当中去
+			raw_depth_queue.enqueue(raw_depth);
+			raw_rgb_queue.enqueue(raw_rgb);
 		}
+		catch (const rs2::error& e)
+		{
+			std::cerr << "[-] AcquireRealSense::Processing Error: RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
+			return;
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << "[-] AcquireRealSense::Processing Exception: " << e.what() << std::endl;
+			return;
+		}
+		Sleep(50);
+
 		
-		
-		//将三幅图像都加入到队列当中去
-		filtered_depth_queue.enqueue(depth_filtered);
-		raw_depth_queue.enqueue(raw_depth);
-		raw_rgb_queue.enqueue(raw_rgb);
 
 		
 		
@@ -141,20 +172,29 @@ void AcquireRealSense::GetPictures()
 		rs2::colorizer color_map;
 		if (raw_depth_queue.poll_for_frame(&raw_depth_frame))
 		{
-			raw_depth_mat = Frame2Mat(raw_depth_frame).clone();
-			color_raw_depth = Frame2Mat(rs2::depth_frame(raw_depth_frame).apply_filter(color_map)).clone();
+			if (raw_depth_frame)
+			{
+				raw_depth_mat = Frame2Mat(raw_depth_frame).clone();
+				color_raw_depth = Frame2Mat(rs2::depth_frame(raw_depth_frame).apply_filter(color_map)).clone();
+			}
+
 
 		}
 		if (raw_rgb_queue.poll_for_frame(&raw_rgb_frame))
 		{
-			raw_rgb_mat = Frame2Mat(raw_rgb_frame).clone();
+			if(raw_rgb_frame)
+				raw_rgb_mat = Frame2Mat(raw_rgb_frame).clone();
 
 		}
 		if (filtered_depth_queue.poll_for_frame(&filtered_depth_frame))
 		{
-			filtered_depth_mat = Frame2Mat(filtered_depth_frame).clone(); //单位应该是mm
+			if (filtered_depth_frame)
+			{
+				filtered_depth_mat = Frame2Mat(filtered_depth_frame).clone(); //单位应该是mm
 
-			color_filtered_depth = Frame2Mat(rs2::depth_frame(filtered_depth_frame).apply_filter(color_map)).clone();
+				color_filtered_depth = Frame2Mat(rs2::depth_frame(filtered_depth_frame).apply_filter(color_map)).clone();
+			}
+
 		}
 	}
 	catch (const rs2::error& e)

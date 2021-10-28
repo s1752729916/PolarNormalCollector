@@ -28,6 +28,7 @@ public:
 	void RegistrationInit();
 	void Processing();
 
+	void start();//开启帧管理器pipeline的线程
 
 
 
@@ -43,6 +44,8 @@ private:
 	AcquirePolarImages* pPolarAcquirer;
 	AcquireRealSense* pRealSenseAcquirer;
 	Registrar* pRegistrar;
+private:
+	std::thread processing_thread; //帧管理器pipeline所在线程句柄
 public://需要暴露给MainWindows连接信号槽
 	Displayer* pDisplayer;
 
@@ -61,17 +64,17 @@ private:
 	Mat normal;
 private:
 	//freeze保存缓冲区
-	Mat I_sum_freeze;
-	Mat I_0_freeze;
-	Mat I_45_freeze;
-	Mat I_90_freeze;
-	Mat I_135_freeze;
-	Mat AoLP_freeze;
-	Mat DoLP_freeze;
-	Mat rgb_freeze;
-	Mat depth_freeze;
-	Mat colorDepth_freeze;
-	Mat normal_freeze;
+	Mat I_sum_freeze; //CV_16UC1
+	Mat I_0_freeze;   //CV_16UC1
+	Mat I_45_freeze;  //CV_16UC1
+	Mat I_90_freeze;  //CV_16UC1
+	Mat I_135_freeze; //CV_16UC1
+	Mat AoLP_freeze;  //CV_32FC1
+	Mat DoLP_freeze;  //CV_32FC1
+	Mat rgb_freeze;   //CV_8UC3
+	Mat depth_freeze; //CV_16UC1
+	Mat colorDepth_freeze; //CV_8UC3
+	Mat normal_freeze;     //CV_32FC1
 private:
 	//capture缓冲区
 	Mat I_sum_capture;

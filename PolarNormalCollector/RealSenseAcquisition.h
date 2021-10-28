@@ -13,6 +13,7 @@ Description:
 #include <librealsense2/rs.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/types_c.h>
+#include <Windows.h>
 
 
 using namespace cv;
@@ -29,6 +30,7 @@ public:
 	~AcquireRealSense();
 	void GetPictures(); //获取最新的RBG图和深度图(1帧)，这个函数应当由主线程进行调用
 	void Processing();//pipeline,用于进行彩色图和深度图的配准和后处理的操作，这个函数应当单独在一个线程进行处理
+	void start(); //用于开启Processing线程的函数
 	Mat Frame2Mat(const rs2::frame& frame);//将frame转换为Mat格式
 
 public:
@@ -57,7 +59,7 @@ private:
 	rs2::frame_queue raw_rgb_queue;
 	rs2::frame_queue filtered_depth_queue;//处理之后的深度图将存放在这个队列当中
 	
-	
+	std::thread processing_thread; //线程句柄必须保存
 };
 
 //测试代码：

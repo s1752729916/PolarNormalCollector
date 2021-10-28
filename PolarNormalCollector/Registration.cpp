@@ -117,9 +117,6 @@ void Registrar::Process(Mat& polarImg)
 		printf_s("[-] Registrar::Process failed: polarImg size is different with polarWidth(Height)\n");
 		return;
 	}
-	printf_s("process type:%d",polarImg.type());
-	printf_s("CV_16UC1:%d", CV_16UC1);
-
 	//统一分辨率
 	Mat polarMat;
 	resize(polarImg, polarMat, Size(rgbWidth, rgbHeight), 0, 0, INTER_AREA); //缩小图像用AREA插值法
