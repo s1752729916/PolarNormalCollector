@@ -28,6 +28,7 @@ FrameManager::FrameManager()
 	isProcessingEnabled = true;
 	
 	
+	
 
 
 	printf_s("[+] FrameManager Started!\n");
@@ -134,7 +135,10 @@ void FrameManager::Capture()
 	//TODO:Save操作
 
 
+	//恢复状态
 	isFreeze = false;
+	pRealSenseAcquirer->EnableEmitter();//开启发射器
+
 
 	
 }
@@ -155,6 +159,10 @@ void FrameManager::Freeze()
 	//暂停pipeline
 	isProcessingEnabled = false; 
 	isFreeze = true; 
+	
+	//深度图已经缓存，为了不影响偏振相机，关闭RGB-D的红外发射器
+	pRealSenseAcquirer->DisableEmitter();
+
 	//保存当前状态
 	I_sum_freeze = I_sum.clone();
 	I_0_freeze = I_0.clone();

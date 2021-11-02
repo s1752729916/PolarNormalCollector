@@ -152,7 +152,7 @@ void AcquireRealSense::Processing()
 		Sleep(50);
 
 		
-
+		
 		
 		
 
@@ -268,5 +268,53 @@ float AcquireRealSense::GetDepthScale()
 
 	return depth_scale;
 
+
+}
+void AcquireRealSense::EnableEmitter()
+{
+	rs2::device dev = profile.get_device();
+	//遍历所有传感器
+	for (rs2::sensor& sensor : dev.query_sensors())
+	{
+		//查看是否为深度传感器
+		if (rs2::depth_sensor dpt = sensor.as<rs2::depth_sensor>())
+		{
+			//查看是否支持关闭红外发射器
+			if (dpt.supports(RS2_OPTION_EMITTER_ENABLED))
+			{
+				dpt.set_option(RS2_OPTION_EMITTER_ENABLED, 1.f); // Enable emitter
+				printf_s("[+] AcquireRealSense::EnableEmitter succeed.\n");
+
+				return;
+
+			}
+		}
+
+	}
+	printf_s("[-] AcquireRealSense::EnableEmitter failed.\n");
+
+}
+void AcquireRealSense::DisableEmitter()
+{
+	rs2::device dev = profile.get_device();
+	//遍历所有传感器
+	for (rs2::sensor& sensor : dev.query_sensors())
+	{
+		//查看是否为深度传感器
+		if (rs2::depth_sensor dpt = sensor.as<rs2::depth_sensor>())
+		{
+			//查看是否支持关闭红外发射器
+			if (dpt.supports(RS2_OPTION_EMITTER_ENABLED))
+			{
+				dpt.set_option(RS2_OPTION_EMITTER_ENABLED, 0.f); // Disable emitter
+				printf_s("[+] AcquireRealSense::DisableEmitter succeed.\n");
+
+				return;
+
+			}
+		}
+
+	}
+	printf_s("[-] AcquireRealSense::DisableEmitter failed.\n");
 
 }

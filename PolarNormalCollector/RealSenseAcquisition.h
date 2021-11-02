@@ -34,6 +34,10 @@ public:
 	
 	Mat Frame2Mat(const rs2::frame& frame);//将frame转换为Mat格式
 	float GetDepthScale();//这个值是深度像素是单位米之间的换算关系，真实深度值=深度像素*depth_scale
+
+	void EnableEmitter();//开启红外发射器
+	void DisableEmitter();//关闭红外发射器，因为红外斑点会 影响偏振图片，所以在偏振拍照时需要关闭红外发射器
+
 public:
 	//Mat格式图像,在构造函数中初始化，大小与width，height相同
 	Mat raw_depth_mat;  //深度图格式为
