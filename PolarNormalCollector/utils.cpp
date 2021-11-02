@@ -126,3 +126,45 @@ Mat depth2normal(Mat& depth, float depth_scale)
 
 }
 
+
+void Save16UC1(String& path,Mat& img)
+{
+	if (img.type() != CV_16UC1)
+	{
+		printf_s("[-] utils::Save16UC1 Failed: Type of img is not CV_16UC1.\n");
+		return;
+	}
+	imwrite(path, img);
+	
+}
+
+void Save8UC3(String& path, Mat& img)
+{
+	if (img.type() != CV_8UC3)
+	{
+		printf_s("[-] utils::CV_8UC3 Failed: Type of img is not CV_8UC3.\n");
+		return;
+	}
+	imwrite(path, img);
+
+}
+
+void Save32FC1(String& path, Mat& img)
+{
+	if (img.type() != CV_32FC1)
+	{
+		printf_s("[-] utils::CV_32FC1 Failed: Type of img is not CV_32FC1.\n");
+		return;
+	}
+	imwrite(path, img);
+}
+
+void Save32FC3(String& path, Mat& img)
+{
+	if (img.type() != CV_32FC3)
+	{
+		printf_s("[-] utils::CV_32FC3 Failed: Type of img is not CV_32FC3.\n");
+		return;
+	}
+	imwrite(path, img);
+}

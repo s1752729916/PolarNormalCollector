@@ -22,6 +22,9 @@ int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
+    QFont font = w.font();
+    font.setPointSize(16);
+    w.setFont(font);
     w.show();
 
 

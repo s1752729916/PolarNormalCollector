@@ -31,6 +31,10 @@ void MainWindow::InitConnects()
         {
             pFrameManager->Continue();
         });
+    connect(ui.btn_save, &QPushButton::clicked, [&]()
+        {
+            pFrameManager->Save();
+        });
     
     connect(pFrameManager->pDisplayer, &Displayer::displayImgs, [&]()
         {

@@ -66,6 +66,8 @@ public:
     QPushButton *btn_continue;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *btn_capture;
+    QSpacerItem *horizontalSpacer_6;
+    QPushButton *btn_save;
     QMenuBar *menubar;
     QStatusBar *statusBar;
 
@@ -73,7 +75,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(2668, 1249);
+        MainWindow->resize(2804, 1325);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -193,6 +195,7 @@ public:
 
         label_7 = new QLabel(group_display);
         label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setScaledContents(false);
         label_7->setAlignment(Qt::AlignCenter);
 
         gridLayout_2->addWidget(label_7, 2, 1, 1, 1);
@@ -269,6 +272,18 @@ public:
 
         horizontalLayout_3->addWidget(btn_capture);
 
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer_6);
+
+        btn_save = new QPushButton(group_control);
+        btn_save->setObjectName(QString::fromUtf8("btn_save"));
+        sizePolicy.setHeightForWidth(btn_save->sizePolicy().hasHeightForWidth());
+        btn_save->setSizePolicy(sizePolicy);
+        btn_save->setMinimumSize(QSize(300, 100));
+
+        horizontalLayout_3->addWidget(btn_save);
+
 
         horizontalLayout_2->addWidget(group_control);
 
@@ -278,7 +293,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 2668, 23));
+        menubar->setGeometry(QRect(0, 0, 2804, 23));
         MainWindow->setMenuBar(menubar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -314,6 +329,7 @@ public:
         btn_freeze->setText(QApplication::translate("MainWindow", "Freeze", nullptr));
         btn_continue->setText(QApplication::translate("MainWindow", "Continue", nullptr));
         btn_capture->setText(QApplication::translate("MainWindow", "Capture", nullptr));
+        btn_save->setText(QApplication::translate("MainWindow", "Save", nullptr));
     } // retranslateUi
 
 };
