@@ -13,4 +13,5 @@ Mat CV_16UC1ToCV_8UC1(Mat& input);
 Mat CV_8UC1ToCV_16UC1(Mat& input);
 Mat CV_16UC1ToCV_8UC3(Mat& input);
 Mat CV_32FC1ToCV_8UC3(Mat& input);
-
+Mat depth2normal(Mat& depth, float depth_scale);
+Mat CV_32FC3ToCV_8UC3(Mat& input);

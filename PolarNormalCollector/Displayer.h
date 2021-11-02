@@ -48,7 +48,7 @@ public:
 		colorDepth_pt = converter.cvMatToQImage(colorDepth);
 
 
-		Normal_qt = converter.cvMatToQImage(Normal);
+		Normal_qt = converter.cvMatToQImage(CV_32FC3ToCV_8UC3(Normal));
 
 
 		//转换完成，发送信号进行显示

@@ -61,4 +61,68 @@ Mat CV_32FC1ToCV_8UC3(Mat& input)
 	cvtColor(_8UC1, _8UC3, COLOR_GRAY2RGB);//转换成8UC3
 	return _8UC3;
 }
+Mat CV_32FC3ToCV_8UC3(Mat& input)
+{
+	//主要是用于法线图的显示
+	//法线图输入格式为CV_32FC3，每个通道值在-1到1之间，所以需要将-1到1之间转换到0到255进显示
+	if (input.type() != CV_32FC3)
+	{
+		printf_s("utils::CV_32FC3ToCV_8UC3 input type is not CV_32FC3\n");
+		return input;
+	}
+	Mat _8UC3;
+	//imshow("normals", input);
+	waitKey(0);
+	input.convertTo(_8UC3, CV_8UC3, 127.5,127.5);
+	Mat _rgb;
+	cvtColor(_8UC3,_rgb,COLOR_BGR2RGB);
+	return _rgb;
+}
+
+Mat depth2normal(Mat& depth, float depth_scale)
+{
+	/*
+
+	*Summary: 将深度图转换为法线图
+
+	*Parameters:
+
+	*     depth: 格式为CV_16UC1的深度图，由RealSenseAcquirer输出的数据
+
+	*Return : 格式为CV_32FC3的法线图，三个通道代表(x,y,z),范围为(-1,1)
+
+	*/
+
+	Mat norm = Mat::zeros(depth.size(),CV_32FC3);
+	for (int x = 1; x < depth.cols - 1; ++x)
+	{
+		for (int y = 1; y < depth.rows - 1; ++y)
+		{
+			//printf_s("depth: %d\n",depth.at<uint16_t>(y,x));
+			float dx = depth.at<uint16_t>(y, x) - depth.at<uint16_t>(y, x - 1);
+			float dy = depth.at<uint16_t>(y, x) - depth.at<uint16_t>(y - 1, x);
+			if (depth.at<uint16_t>(y, x) == 0)
+			{
+				//无效深度值的法向量设为(-1,-1,-1)，这样的话在RGB深度图中是(0,0,0)
+				norm.at<Vec3f>(y, x) = Vec3f(-1,-1,-1);
+
+			}
+			else
+			{
+				Vec3f d(dx, -dy, 1);
+				norm.at<Vec3f>(y, x) = normalize(d);
+			}
+
+			
+		}
+	}
+
+
+
+	return norm;
+	
+
+
+
+}
 

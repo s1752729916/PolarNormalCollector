@@ -59,9 +59,11 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QGroupBox *group_control;
     QHBoxLayout *horizontalLayout_3;
-    QPushButton *btn_processing;
-    QSpacerItem *horizontalSpacer;
+    QPushButton *btn_registration;
+    QSpacerItem *horizontalSpacer_5;
     QPushButton *btn_freeze;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *btn_continue;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *btn_capture;
     QMenuBar *menubar;
@@ -220,20 +222,20 @@ public:
         group_control->setObjectName(QString::fromUtf8("group_control"));
         horizontalLayout_3 = new QHBoxLayout(group_control);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        btn_processing = new QPushButton(group_control);
-        btn_processing->setObjectName(QString::fromUtf8("btn_processing"));
+        btn_registration = new QPushButton(group_control);
+        btn_registration->setObjectName(QString::fromUtf8("btn_registration"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(btn_processing->sizePolicy().hasHeightForWidth());
-        btn_processing->setSizePolicy(sizePolicy);
-        btn_processing->setMinimumSize(QSize(300, 0));
+        sizePolicy.setHeightForWidth(btn_registration->sizePolicy().hasHeightForWidth());
+        btn_registration->setSizePolicy(sizePolicy);
+        btn_registration->setMinimumSize(QSize(300, 0));
 
-        horizontalLayout_3->addWidget(btn_processing);
+        horizontalLayout_3->addWidget(btn_registration);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_3->addItem(horizontalSpacer);
+        horizontalLayout_3->addItem(horizontalSpacer_5);
 
         btn_freeze = new QPushButton(group_control);
         btn_freeze->setObjectName(QString::fromUtf8("btn_freeze"));
@@ -242,6 +244,18 @@ public:
         btn_freeze->setMinimumSize(QSize(300, 0));
 
         horizontalLayout_3->addWidget(btn_freeze);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer);
+
+        btn_continue = new QPushButton(group_control);
+        btn_continue->setObjectName(QString::fromUtf8("btn_continue"));
+        sizePolicy.setHeightForWidth(btn_continue->sizePolicy().hasHeightForWidth());
+        btn_continue->setSizePolicy(sizePolicy);
+        btn_continue->setMinimumSize(QSize(300, 0));
+
+        horizontalLayout_3->addWidget(btn_continue);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -296,8 +310,9 @@ public:
         label_Normal->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
         label_7->setText(QApplication::translate("MainWindow", "RGB", nullptr));
         group_control->setTitle(QApplication::translate("MainWindow", "Control", nullptr));
-        btn_processing->setText(QApplication::translate("MainWindow", "Processing", nullptr));
+        btn_registration->setText(QApplication::translate("MainWindow", "Registration", nullptr));
         btn_freeze->setText(QApplication::translate("MainWindow", "Freeze", nullptr));
+        btn_continue->setText(QApplication::translate("MainWindow", "Continue", nullptr));
         btn_capture->setText(QApplication::translate("MainWindow", "Capture", nullptr));
     } // retranslateUi
 

@@ -25,17 +25,18 @@ public:
 	FrameManager();
 	~FrameManager();
 	void Freeze();
+	void Continue();//Freeze后叠加显示Freeze状态与当前状态
+	void Capture();
 	void RegistrationInit();
 	void Processing();
-
+	void Save();
 	void start();//开启帧管理器pipeline的线程
-
 
 
 private:
 	//参数
 	bool isProcessingEnabled;
-
+	bool isFreeze;//这个标签位用来控制是否进入了Freeze状态，Freeze函数将该标签置真，Processing或者Capture函数将该函数置位假
 
 
 
@@ -74,7 +75,7 @@ private:
 	Mat rgb_freeze;   //CV_8UC3
 	Mat depth_freeze; //CV_16UC1
 	Mat colorDepth_freeze; //CV_8UC3
-	Mat normal_freeze;     //CV_32FC1
+	Mat normal_freeze;     //CV_32FC3
 private:
 	//capture缓冲区
 	Mat I_sum_capture;

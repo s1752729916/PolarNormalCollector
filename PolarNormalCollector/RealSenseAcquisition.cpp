@@ -54,7 +54,7 @@ AcquireRealSense::AcquireRealSense()
 	try
 	{
 		printf_s("[<-] AcquireRealSense Pipeline starting...\n");
-		pipe.start(cfg);
+		profile = pipe.start(cfg);
 		printf_s("[+] AcquireRealSense Pipeline start succeed!\n");
 	}
 	catch (const rs2::error& e)
@@ -246,5 +246,27 @@ Mat AcquireRealSense::Frame2Mat(const rs2::frame& frame)
 		return cv::Mat(cv::Size(w, h), CV_8UC1, (void*)frame.get_data(), cv::Mat::AUTO_STEP);
 
 	}
+
+}
+float AcquireRealSense::GetDepthScale()
+{
+	float depth_scale = 0.01;//默认1毫米
+	rs2::device dev = profile.get_device();
+	
+	//遍历所有传感器
+	for (rs2::sensor& sensor : dev.query_sensors())
+	{
+		//查看是否为深度传感器
+		if (rs2::depth_sensor dpt = sensor.as<rs2::depth_sensor>())
+		{
+			return dpt.get_depth_scale();//返回depth_scale
+		}
+
+	}
+	//走到这里说明没有找到深度传感器
+	printf_s("[-] AcquireRealSense::GetDepthScale Device does not have a depth sensor\n");
+
+	return depth_scale;
+
 
 }

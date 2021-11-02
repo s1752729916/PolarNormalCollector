@@ -31,8 +31,9 @@ public:
 	void GetPictures(); //获取最新的RBG图和深度图(1帧)，这个函数应当由主线程进行调用
 	void Processing();//pipeline,用于进行彩色图和深度图的配准和后处理的操作，这个函数应当单独在一个线程进行处理
 	void start(); //用于开启Processing线程的函数
+	
 	Mat Frame2Mat(const rs2::frame& frame);//将frame转换为Mat格式
-
+	float GetDepthScale();//这个值是深度像素是单位米之间的换算关系，真实深度值=深度像素*depth_scale
 public:
 	//Mat格式图像,在构造函数中初始化，大小与width，height相同
 	Mat raw_depth_mat;  //深度图格式为
@@ -47,7 +48,8 @@ private:
 	rs2::pipeline pipe;
 	rs2::config cfg;
 	direction align_direction;
-	
+	rs2::pipeline_profile profile;//start函数返回的数据管道的profile
+
 	//后处理滤波器设置
 	bool isPostProcessingEnabled; //是否进行后处理
 	rs2::threshold_filter thr_filter;   // Threshold  - removes values outside recommended range

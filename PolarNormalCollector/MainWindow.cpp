@@ -10,10 +10,28 @@ MainWindow::MainWindow(QWidget* parent)
     
     //初始化信号槽
     InitConnects();
+    
 }
 
 void MainWindow::InitConnects()
 {
+    connect(ui.btn_freeze, &QPushButton::clicked, [&]() 
+        {
+            pFrameManager->Freeze();
+        });
+    connect(ui.btn_capture, &QPushButton::clicked, [&]()
+        {
+            pFrameManager->Capture();;
+        });
+    connect(ui.btn_registration, &QPushButton::clicked, [&]()
+        {
+            pFrameManager->RegistrationInit();
+        });
+    connect(ui.btn_continue, &QPushButton::clicked, [&]()
+        {
+            pFrameManager->Continue();
+        });
+    
     connect(pFrameManager->pDisplayer, &Displayer::displayImgs, [&]()
         {
             //在这个域里可以以引用的方式使用MainWindows作用于的变量

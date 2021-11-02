@@ -79,7 +79,20 @@ void FrameManager::Processing()
 			rgb = pRealSenseAcquirer->raw_rgb_mat;
 			depth = pRealSenseAcquirer->filtered_depth_mat; 
 			colorDepth = pRealSenseAcquirer->color_filtered_depth;
-			normal = pRealSenseAcquirer->color_filtered_depth;//TODO：法线还未实现
+			normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat,pRealSenseAcquirer->GetDepthScale());//TODO：法线还未实现
+
+			//叠加操作
+			if (isFreeze)
+			{
+				addWeighted(I_sum_freeze, 0.5, I_sum, 0.5, 0, I_sum);
+				addWeighted(DoLP_freeze, 0.5, DoLP, 0.5, 0, DoLP);
+				addWeighted(AoLP_freeze, 0.5, AoLP, 0.5, 0, AoLP);
+				addWeighted(rgb_freeze, 0.5, rgb, 0.5, 0, rgb);
+				addWeighted(depth_freeze, 0.5, depth, 0.5, 0, depth);
+				addWeighted(colorDepth_freeze, 0.5, colorDepth, 0.5, 0, colorDepth);
+				addWeighted(normal_freeze, 0.5, normal, 0.5, 0, normal);
+			}
+
 
 			//Displayer操作...
 			pDisplayer->Display(I_sum, DoLP, AoLP, rgb, depth, colorDepth, normal);
@@ -91,11 +104,57 @@ void FrameManager::Processing()
 	
 	
 }
+void FrameManager::Capture()
+{
+	//这个函数是在Freeze、Continue之后，把非透物体替换成透明物体后，最后需要完成的步骤
+	//保存Freeze状态的RGB-D信息，以及当前时刻的偏振信息
+	if (!isFreeze)
+	{
+		printf_s("[-] FrameManager::Capture isFreeze is false. Press Freeze first\n");
+		return;
+	}
+	if (!isProcessingEnabled)
+	{
+		printf_s("[-] FrameManager::Capture isProcessingEnabled is false. Press Continue first\n");
+		return;
+	}
+	I_sum_capture = I_sum.clone();
+	I_0_capture = I_0.clone();
+	I_45_capture = I_45.clone();
+	I_90_capture = I_90.clone();
+	I_135_capture = I_135.clone();
+	AoLP_capture = AoLP.clone();
+	rgb_capture = rgb.clone();
+
+	//深度和法线图使用Freeze保存的状态
+	depth_capture = depth_freeze.clone();
+	colorDepth_capture = colorDepth_freeze.clone();
+	normal_capture = normal_freeze.clone();
+
+	//TODO:Save操作
+
+
+	isFreeze = false;
+
+	
+}
+void FrameManager::Continue()
+{
+	//这个函数的作用是在Freeze之后恢复pipeline，保持Freeze时刻的帧与当前帧的叠加显示
+	
+	if (isFreeze == false)
+	{
+		printf_s("[-] FrameManager::Continue isFreeze is false. Press Freeze first\n");
+		return;
+	}
+	isProcessingEnabled = true;
+	printf_s("[+] FrameManager::Continue continue succeed\n");
+}
 void FrameManager::Freeze()
 {
 	//暂停pipeline
-	isProcessingEnabled = false;
-	
+	isProcessingEnabled = false; 
+	isFreeze = true; 
 	//保存当前状态
 	I_sum_freeze = I_sum.clone();
 	I_0_freeze = I_0.clone();
@@ -108,7 +167,28 @@ void FrameManager::Freeze()
 	depth_freeze = depth.clone();
 	colorDepth_freeze = colorDepth.clone();
 	normal_freeze = normal.clone();
+	printf_s("[+] FrameManager:: Freeze freeze succeed\n");
 
+}
+void FrameManager::RegistrationInit()
+{
+	if (!isFreeze)
+	{
+		printf_s("[-] FrameManager::RegistrationInit isFreeze is false. Press Freeze first\n");
+		return;
+	}
+	if (isProcessingEnabled)
+	{
+		printf_s("[-] FrameManager::RegistrationInit isProcessingEnabled is true.\n");
+		return;
+	}
+	pRegistrar->CalculateTransform(I_sum_freeze,rgb_freeze);
+		
+}
+
+void FrameManager::Save()
+{
+	
 }
 
 
