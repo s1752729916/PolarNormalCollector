@@ -13,11 +13,14 @@ Description:
 4、要求输入图像必须是uint8格式的
 **************************************************************************/
 #include <opencv2/opencv.hpp>
+#include "Config.h"
+
 using namespace cv;
 class Registrar
 {
 public:
 	Registrar();
+	Registrar(Config* pConfig);
 	~Registrar();
 	void Process(Mat& polarImg);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用，这个函数对输入格式无要求
 	void CalculateTransform(Mat& polarImg, Mat& rgbImg);//这个函数是用来计算两个图像之间的变换矩阵的，两张图像应包含相同的棋盘格信息,注意这里的输入偏振图像必须要转换成CV_8UC1类型
@@ -26,7 +29,7 @@ private:
 	//偏振图像分辨率
 	int polarWidth;
 	int polarHeight;
-	
+	Config* mpConfig;
 	//rgb图像分辨率
 	int rgbWidth;
 	int rgbHeight;

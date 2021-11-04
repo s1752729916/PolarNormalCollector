@@ -1,7 +1,7 @@
 #include "utils.h"
 Mat CV_16UC1ToCV_8UC1(Mat& input)
 {
-	//保证亮度不变的格式转换
+	//16位转8位，像素的位数必须是16位，例如深度图;偏振图像的格式虽然为16UC1,
 	if (input.type() != CV_16UC1)
 	{
 		printf_s("utils::CV_16UC1ToCV_8UC1 input type is not CV_16UC1\n");
@@ -9,7 +9,7 @@ Mat CV_16UC1ToCV_8UC1(Mat& input)
 	}
 
 	Mat out;
-	out = input / 257;
+	out = input / 257;  
 	out.convertTo(out, CV_8UC1);
 
 
@@ -18,19 +18,27 @@ Mat CV_16UC1ToCV_8UC1(Mat& input)
 	return out.clone();
 
 }
-Mat CV_8UC1ToCV_16UC1(Mat& input)
+Mat CV_16UC12CV_8UC1_12Bit(Mat & input)
 {
+	//12位的转换，用于偏振图像从CV_16UC1转换成CV_8UC1的格式
 	//保证亮度不变的格式转换
-	if (input.type() != CV_8UC1)
+	if (input.type() != CV_16UC1)
 	{
-		printf_s("utils::CV_8UC1ToCU_16UC1 input type is not CV_8UC1\n");
+		printf_s("utils::CV_16UC12CV_8UC1_12Bit input type is not CV_16UC1\n");
 		return input;
 	}
+
 	Mat out;
-	input.convertTo(out, CV_16UC1);
-	out = out * 257;//先转换格式再乘倍数，数值不会溢出
-	return out;
+	out = input / 16;  //图片实际上是12位的，因此只需要除16即可
+	out.convertTo(out, CV_8UC1);
+
+
+	//返回函数内部定义的Mat是可行的
+	//Mat由计数器来控制释放与否，因此函数结束后不会清除函数内部定义的Mat
+	return out.clone();
+
 }
+
 
 Mat CV_16UC1ToCV_8UC3(Mat& input)
 {

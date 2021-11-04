@@ -9,9 +9,12 @@ Description:
 **************************************************************************/
 
 #include "Registration.h"
-
 using namespace std;
 Registrar::Registrar()
+{
+
+}
+Registrar::Registrar(Config* pConfig)
 {
 	//构造函数，配置分辨率等参数
 	polarWidth = 1232;
@@ -34,7 +37,25 @@ Registrar::Registrar()
 	pt_3 = 43;
 
 	//初始化透视变换矩阵(单位阵)
-	transformMat = Mat::eye(Size(3,3),CV_64F);
+	transformMat = Mat::eye(Size(3, 3), CV_64F);
+
+	//尝试读取配置文件中的变换矩阵
+	mpConfig = pConfig;
+	std::vector<double> tf;
+	if (mpConfig->ReadInto(tf, "TransformMatrix"))
+	{
+		for (int row = 0; row < transformMat.rows; row++)
+		{
+			for (int col = 0; col < transformMat.cols; col++)
+			{
+				transformMat.at<double>(row,col) = tf[row*transformMat.cols + col];
+			}
+		}
+		printf_s("[+] Registrar::Registrar: Found TransformMatrix and Load succeed.\n");
+	}
+
+
+	
 }
 Registrar::~Registrar()
 {
@@ -107,6 +128,22 @@ void Registrar::CalculateTransform(Mat& polarImg, Mat& rgbImg)
 	dstPoints[2] = rgbPoints[pt_2];
 	dstPoints[3] = rgbPoints[pt_3];
 	transformMat = getPerspectiveTransform(srcPoints,dstPoints);
+
+	//保存透视变换矩阵
+	std::vector<double> tf;
+
+	for (int row = 0; row < transformMat.rows; row++)
+	{
+		for (int col = 0; col < transformMat.cols; col++)
+		{
+			tf.push_back(transformMat.at<double>(row, col));
+		}
+	}
+
+	mpConfig->Add("TransformMatrix",tf);
+	
+
+
 	printf_s("[+] Registrar::CalculateTransform succeed\n");
 }
 void Registrar::Process(Mat& polarImg)

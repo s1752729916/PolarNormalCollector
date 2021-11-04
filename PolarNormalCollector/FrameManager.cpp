@@ -9,15 +9,18 @@ Description:
 
 **************************************************************************/
 #include "FrameManager.h"
-
+#include <vector>
 
 FrameManager::FrameManager()
 {
 	printf_s("[<-] FrameManager Starting...\n");
 	//初始化各个类
+	pConfig = new Config("config.txt");
+
+
 	pPolarAcquirer = new AcquirePolarImages;
 	pRealSenseAcquirer = new AcquireRealSense;
-	pRegistrar = new Registrar;
+	pRegistrar = new Registrar(pConfig);
 	pDisplayer = new Displayer;
 
 	//启动子模块线程
@@ -26,6 +29,11 @@ FrameManager::FrameManager()
 	
 	//设置参数
 	isProcessingEnabled = true;
+	rootSave = "";
+	count = 0;
+	rootSave = pConfig->Read("SaveRoot",rootSave);//读取保存路径
+	count = pConfig->Read("Count",count);//读取已保存数量
+
 	
 	
 	
@@ -52,7 +60,7 @@ void FrameManager::Processing()
 
 			//读取RealSense图像
 			pRealSenseAcquirer->GetPictures();
-			
+
 
 
 			//配准操作
@@ -181,6 +189,7 @@ void FrameManager::Freeze()
 	pRealSenseAcquirer->DisableEmitter();
 
 	//保存当前状态
+	I_sum_raw = pPolarAcquirer->I_sum.clone();
 	I_sum_freeze = I_sum.clone();
 	I_0_freeze = I_0.clone();
 	I_45_freeze = I_45.clone();
@@ -207,8 +216,12 @@ void FrameManager::RegistrationInit()
 		printf_s("[-] FrameManager::RegistrationInit isProcessingEnabled is true.\n");
 		return;
 	}
-	pRegistrar->CalculateTransform(I_sum_freeze,rgb_freeze);
-		
+	Mat polarImg;
+	I_sum_raw.convertTo(polarImg,CV_8UC1);
+	imshow("polarImg", polarImg);
+	waitKey(0);
+	pRegistrar->CalculateTransform(polarImg,rgb_freeze);
+	
 }
 
 void FrameManager::Save()
@@ -223,53 +236,65 @@ void FrameManager::Save()
 	}
 
 	//读取路径与参数
-	String root("");
 	String path;
-	int count = 0;  //TODO: 这个count后续需要从config文件中读取，每保存一个文件自动加一
+	//int count = 0;  //TODO: 这个count后续需要从config文件中读取，每保存一个文件自动加一
 
 	//先保存格式为CV_16UC1的图片,I_sum,I_0,I_45,I_90,I_135,depth
 
 	path = str_format("%09d-I-Sum.png",count);
+	path = rootSave + path;
 	Save16UC1(path,I_sum_capture);
-
+	
 
 	path = str_format("%09d-I-0.png", count);
+	path = rootSave + path;
 	Save16UC1(path, I_0_capture);
 
 	path = str_format("%09d-I-45.png", count);
+	path = rootSave + path;
 	Save16UC1(path, I_45_capture);
 
 
 	path = str_format("%09d-I-90.png", count);
+	path = rootSave + path;
 	Save16UC1(path, I_90_capture);
 
 
 	path = str_format("%09d-I-135.png", count);
+	path = rootSave + path;
 	Save16UC1(path, I_135_capture);
 
 	path = str_format("%09d-depth.png", count);
+	path = rootSave + path;
 	Save16UC1(path, depth_capture);
 
 	//保存CV_8UC3格式
 	path = str_format("%09d-RGB.png",count);
+	path = rootSave + path;
 	Save8UC3(path,rgb_capture);
 
 	path = str_format("%09d-color-depth.png", count);
+	path = rootSave + path;
 	Save8UC3(path, colorDepth_capture);
 
 	//保存CV_32FC1格式(.exr文件)：AoLP，DoLP
 	path = str_format("%09d-AoLP.exr", count);
+	path = rootSave + path;
 	Save32FC1(path, AoLP_capture);
 
 	path = str_format("%09d-DoLP.exr", count);
+	path = rootSave + path;
 	Save32FC1(path, DoLP_capture);
 
 	//保存CV_32FC3格式(.exr文件)：normals
 	path = str_format("%09d-normals.exr", count);
+	path = rootSave + path;
 	cvtColor(normal_capture, normal_capture, CV_BGR2RGB);
 	Save32FC3(path, normal_capture);
 
-
+	//更改计数
+	count += 1;
+	pConfig->Add("Count",count);
 	printf_s("[+] FrameManager::Save succeed.\n");
 
 	
@@ -283,4 +308,5 @@ FrameManager::~FrameManager()
 	delete pRealSenseAcquirer;
 	delete pRegistrar;
 	delete pDisplayer;
+	delete pConfig;
 }

@@ -19,6 +19,7 @@ Description:
 #include "RealSenseAcquisition.h"
 #include "Registration.h"
 #include "Displayer.h"
+#include "Config.h"
 class FrameManager
 {
 public:
@@ -37,7 +38,8 @@ private:
 	//参数
 	bool isProcessingEnabled;
 	bool isFreeze;//这个标签位用来控制是否进入了Freeze状态，Freeze函数将该标签置真，Processing或者Capture函数将该函数置位假
-
+	int count;//当前计数，用于保存文件
+	std::string rootSave;//保存路径
 
 
 private:
@@ -45,6 +47,7 @@ private:
 	AcquirePolarImages* pPolarAcquirer;
 	AcquireRealSense* pRealSenseAcquirer;
 	Registrar* pRegistrar;
+	Config* pConfig; //配置文件
 private:
 	std::thread processing_thread; //帧管理器pipeline所在线程句柄
 public://需要暴露给MainWindows连接信号槽
@@ -52,6 +55,7 @@ public://需要暴露给MainWindows连接信号槽
 
 private:
 	//视频流中的各图像缓存区
+	Mat I_sum_raw;//用于配准
 	Mat I_sum;
 	Mat I_0;
 	Mat I_45;

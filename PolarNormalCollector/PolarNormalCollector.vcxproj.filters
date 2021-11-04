@@ -37,6 +37,9 @@
     <Filter Include="GeneratedFiles">
       <UniqueIdentifier>{1589ac65-a2d8-45cd-8335-cc7614c0d110}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{b617b2bf-c7db-4e69-80b4-b6794af81c9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,6 +75,9 @@
     <ClCompile Include="utils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolarImagesAcquistion.h">
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="cv2qt.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

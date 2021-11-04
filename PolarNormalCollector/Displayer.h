@@ -29,15 +29,17 @@ public:
 		CV2Qt converter;
 
 		//Intensity
-	
-		Intensity_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC3(Intensity));
+		Mat Intensity_8UC3;
+		cvtColor(CV_16UC12CV_8UC1_12Bit(Intensity), Intensity_8UC3, COLOR_GRAY2RGB);
+		Intensity_qt = converter.cvMatToQImage(Intensity_8UC3);
 
 		//Intensity_bright
-		Mat bright;
-		Mat bright_8UC3;
-		Intensity.convertTo(bright,CV_8UC1);
-		cvtColor(bright,bright_8UC3,COLOR_GRAY2RGB);
-		Intensity_bright_qt = converter.cvMatToQImage(bright_8UC3);
+		//Mat bright;
+		//Mat bright_8UC3;
+		//Intensity.convertTo(bright,CV_8UC1);
+		//cvtColor(bright,bright_8UC3,COLOR_GRAY2RGB);
+		//Intensity_bright_qt = converter.cvMatToQImage(bright_8UC3);
+		Intensity_bright_qt = Intensity_qt;
 		DoLP_qt = converter.cvMatToQImage(CV_32FC1ToCV_8UC3(DoLP));
 		AoLP_qt = converter.cvMatToQImage(CV_32FC1ToCV_8UC3(AoLP));
 
