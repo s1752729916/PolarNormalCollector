@@ -68,6 +68,8 @@ public:
     QPushButton *btn_capture;
     QSpacerItem *horizontalSpacer_6;
     QPushButton *btn_save;
+    QSpacerItem *horizontalSpacer_10;
+    QPushButton *btn_save_calibrate;
     QMenuBar *menubar;
     QStatusBar *statusBar;
 
@@ -284,6 +286,18 @@ public:
 
         horizontalLayout_3->addWidget(btn_save);
 
+        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer_10);
+
+        btn_save_calibrate = new QPushButton(group_control);
+        btn_save_calibrate->setObjectName(QString::fromUtf8("btn_save_calibrate"));
+        sizePolicy.setHeightForWidth(btn_save_calibrate->sizePolicy().hasHeightForWidth());
+        btn_save_calibrate->setSizePolicy(sizePolicy);
+        btn_save_calibrate->setMinimumSize(QSize(300, 100));
+
+        horizontalLayout_3->addWidget(btn_save_calibrate);
+
 
         horizontalLayout_2->addWidget(group_control);
 
@@ -330,6 +344,7 @@ public:
         btn_continue->setText(QApplication::translate("MainWindow", "Continue", nullptr));
         btn_capture->setText(QApplication::translate("MainWindow", "Capture", nullptr));
         btn_save->setText(QApplication::translate("MainWindow", "Save", nullptr));
+        btn_save_calibrate->setText(QApplication::translate("MainWindow", "Save for Calibration", nullptr));
     } // retranslateUi
 
 };

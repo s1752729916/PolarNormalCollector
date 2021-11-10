@@ -24,7 +24,8 @@ public:
 	~Registrar();
 	void Process(Mat& polarImg);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用，这个函数对输入格式无要求
 	void CalculateTransform(Mat& polarImg, Mat& rgbImg);//这个函数是用来计算两个图像之间的变换矩阵的，两张图像应包含相同的棋盘格信息,注意这里的输入偏振图像必须要转换成CV_8UC1类型
-	void ReadTransform();//从配置文件中读取变换矩阵(后续再加)
+	void ReadConfig();//读取配置文件，例如透视变换矩阵，畸变参数等等
+	void UndistortPolarImg(Mat& polarImg);//对偏振图像去畸变
 private:
 	//偏振图像分辨率
 	int polarWidth;
@@ -43,6 +44,11 @@ private:
 	int pt_2;
 	int pt_3;
 
+
+	Mat transformMat; //两张图片间的仿射变换矩阵
+	Mat polarInstrinsic;//相机内参
+	Mat polarDistortCoeffs;//畸变参数,1x4矩阵，(kc1,kc2,kc3,kc4)，RadialDistortion(kc1,kc2)，TangentialDistortion(kc3,kc4)
+
 public:
 	//画提取到的角点
 	Mat polarCorners;
@@ -51,7 +57,10 @@ public:
 	Mat registered_poarImg; //配准过的偏振图像
 	Mat registered_rgbImg; //以rgb配准的话这个与输入的rgbImg相等
 
-	Mat transformMat; //两张图片间的仿射变换矩阵
+
+
+	//畸变修正
+	Mat undistorted_polarImg;
 
 };
 

@@ -24,8 +24,8 @@ Registrar::Registrar(Config* pConfig)
 	
 	//棋盘格参数
 
-	boardSize.width = 9;
-	boardSize.height = 6;
+	boardSize.width = 11;
+	boardSize.height = 8;
 
 	polarCorners = Mat::zeros(rgbHeight, rgbWidth,CV_8UC1);
 	rgbCorners = Mat::zeros(rgbHeight,rgbWidth,CV_8UC3);
@@ -38,21 +38,14 @@ Registrar::Registrar(Config* pConfig)
 
 	//初始化透视变换矩阵(单位阵)
 	transformMat = Mat::eye(Size(3, 3), CV_64F);
+	//初始化偏振相机内参矩阵
+	polarInstrinsic = Mat::eye(Size(3, 3), CV_64F);
+	//初始化偏振相机畸变参数
+	polarDistortCoeffs = Mat::zeros(Size(1, 4), CV_64F);
 
-	//尝试读取配置文件中的变换矩阵
+	//读取配置文件
 	mpConfig = pConfig;
-	std::vector<double> tf;
-	if (mpConfig->ReadInto(tf, "TransformMatrix"))
-	{
-		for (int row = 0; row < transformMat.rows; row++)
-		{
-			for (int col = 0; col < transformMat.cols; col++)
-			{
-				transformMat.at<double>(row,col) = tf[row*transformMat.cols + col];
-			}
-		}
-		printf_s("[+] Registrar::Registrar: Found TransformMatrix and Load succeed.\n");
-	}
+	ReadConfig();
 
 
 	
@@ -163,10 +156,69 @@ void Registrar::Process(Mat& polarImg)
 	
 	//registered_poarImg.convertTo(registered_poarImg,registered_poarImg.type(),40,0);  //为了显示更方便
 }
-
-void Registrar::ReadTransform()
+void Registrar::ReadConfig()
 {
+	//尝试读取配置文件中的变换矩阵
+	std::vector<double> tf;
+	if (mpConfig->ReadInto(tf, "TransformMatrix"))
+	{
+		for (int row = 0; row < transformMat.rows; row++)
+		{
+			for (int col = 0; col < transformMat.cols; col++)
+			{
+				transformMat.at<double>(row, col) = tf[row * transformMat.cols + col];
+			}
+		}
+	}
+	else
+	{
+		printf_s("[-] Registrar::ReadConfig: TransformMatrix load failed.\n");
 
+	}
+
+	//读取偏振相机内参
+	if (mpConfig->ReadInto(tf, "PolarIntrinsicMatrix"))
+	{
+		for (int row = 0; row < polarInstrinsic.rows; row++)
+		{
+			for (int col = 0; col < polarInstrinsic.cols; col++)
+			{
+				polarInstrinsic.at<double>(row, col) = tf[row * polarInstrinsic.cols + col];
+			}
+		}
+	}
+	else
+	{
+		printf_s("[-] Registrar::ReadConfig: PolarIntrinsicMatrix load failed.\n");
+
+	}
+
+	//读取相机畸变参数
+	if (mpConfig->ReadInto(tf, "PolarDistortionCoeffs"))
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			polarDistortCoeffs.at<double>(i, 0) = tf[i];
+		}
+	}
+	else
+	{
+		printf_s("[-] Registrar::ReadConfig: PolarDistortionCoeffs load failed.\n");
+	}
+	printf_s("[+] Registrar::ReadConfig: Load params succeed.\n");
+	
+
+
+
+}
+void Registrar::UndistortPolarImg(Mat& polarImg)
+{
+	if (polarImg.empty())
+	{
+		printf_s("[+] Registrar::UndistortPolarImg: Input polarImg is empty.\n");
+		return;
+	}
+	undistort(polarImg,undistorted_polarImg,polarInstrinsic,polarDistortCoeffs);
 }
 
 

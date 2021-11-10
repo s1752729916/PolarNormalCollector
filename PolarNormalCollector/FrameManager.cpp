@@ -29,10 +29,18 @@ FrameManager::FrameManager()
 	
 	//设置参数
 	isProcessingEnabled = true;
+	
+	//数据保存设置
 	rootSave = "";
 	count = 0;
 	rootSave = pConfig->Read("SaveRoot",rootSave);//读取保存路径
 	count = pConfig->Read("Count",count);//读取已保存数量
+
+	//标定文件保存设置
+	calibrationCount = 0;
+	calibrationPath = pConfig->Read("CalibrationPath", calibrationPath);
+
+	
 
 	
 	
@@ -63,26 +71,34 @@ void FrameManager::Processing()
 
 
 
-			//配准操作
-			pRegistrar->Process(pPolarAcquirer->I_sum);
+			//配准操作(包括去畸变)
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_sum);  //先去畸变，再进行配准
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			I_sum = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->I_0);
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_0);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			I_0 = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->I_45);
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_45);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			I_45 = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->I_90);
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_90);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			I_90 = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->I_135);
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_135);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			I_135 = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->AoLP);
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->AoLP);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			AoLP = pRegistrar->registered_poarImg.clone();
 
-			pRegistrar->Process(pPolarAcquirer->DoLP);
+
+			pRegistrar->UndistortPolarImg(pPolarAcquirer->DoLP);
+			pRegistrar->Process(pRegistrar->undistorted_polarImg);
 			DoLP = pRegistrar->registered_poarImg.clone();
 
 			rgb = pRealSenseAcquirer->raw_rgb_mat;
@@ -101,13 +117,13 @@ void FrameManager::Processing()
 				Mat depth_temp;
 				Mat colorDepth_temp;
 				Mat normal_temp;
-				addWeighted(I_sum_freeze, 0.5, I_sum, 0.5, 0, I_sum_temp);
-				addWeighted(DoLP_freeze, 0.5, DoLP, 0.5, 0, DoLP_temp);
-				addWeighted(AoLP_freeze, 0.5, AoLP, 0.5, 0, AoLP_temp);
-				addWeighted(rgb_freeze, 0.5, rgb, 0.5, 0, rgb_temp);
-				addWeighted(depth_freeze, 0.5, depth, 0.5, 0, depth_temp);
-				addWeighted(colorDepth_freeze, 0.5, colorDepth, 0.5, 0, colorDepth_temp);
-				addWeighted(normal_freeze, 0.5, normal, 0.5, 0, normal_temp);
+				addWeighted(I_sum_freeze, 0.3, I_sum, 0.7, 0, I_sum_temp);
+				addWeighted(DoLP_freeze, 0.3, DoLP, 0.7, 0, DoLP_temp);
+				addWeighted(AoLP_freeze, 0.3, AoLP, 0.7, 0, AoLP_temp);
+				addWeighted(rgb_freeze, 0.3, rgb, 0.7, 0, rgb_temp);
+				addWeighted(depth_freeze, 0.3, depth, 0.7, 0, depth_temp);
+				addWeighted(colorDepth_freeze, 0.3, colorDepth, 0.7, 0, colorDepth_temp);
+				addWeighted(normal_freeze, 0.3, normal, 0.7, 0, normal_temp);
 				pDisplayer->Display(I_sum_temp, DoLP_temp, AoLP_temp, rgb_temp, depth_temp, colorDepth_temp, normal_temp);
 
 			}
@@ -189,7 +205,7 @@ void FrameManager::Freeze()
 	pRealSenseAcquirer->DisableEmitter();
 
 	//保存当前状态
-	I_sum_raw = pPolarAcquirer->I_sum.clone();
+	I_sum_raw = pPolarAcquirer->I_sum.clone(); //对齐之前的图像保存下来
 	I_sum_freeze = I_sum.clone();
 	I_0_freeze = I_0.clone();
 	I_45_freeze = I_45.clone();
@@ -217,9 +233,7 @@ void FrameManager::RegistrationInit()
 		return;
 	}
 	Mat polarImg;
-	I_sum_raw.convertTo(polarImg,CV_8UC1);
-	imshow("polarImg", polarImg);
-	waitKey(0);
+	polarImg = CV_16UC12CV_8UC1_12Bit(I_sum_raw);
 	pRegistrar->CalculateTransform(polarImg,rgb_freeze);
 	
 }
@@ -292,12 +306,44 @@ void FrameManager::Save()
 	cvtColor(normal_capture, normal_capture, CV_BGR2RGB);
 	Save32FC3(path, normal_capture);
 
+
+	printf_s("[+] FrameManager::Save: Save %09d succeed.\n", count);
 	//更改计数
 	count += 1;
 	pConfig->Add("Count",count);
-	printf_s("[+] FrameManager::Save succeed.\n");
 
 	
+}
+void FrameManager::SaveCalibration()
+{
+	if (!isFreeze)
+	{
+		printf_s("[-] FrameManager::SaveCalibration: isFreeze is false. Press Freeze first\n");
+	}
+	String path;
+	
+	//保存极化图像
+	path = str_format("%09d-Calibration-Polar.png", calibrationCount);
+	path = calibrationPath + path;
+	Mat polarImg;
+	polarImg = CV_16UC12CV_8UC1_12Bit(I_sum_raw);//12位极化图像转换成8位图像
+	Save8UC1(path, polarImg);
+
+
+	//保存RGB图像
+	path = str_format("%09d-Calibration-RGB.png", calibrationCount);
+	path = calibrationPath + path;
+	Save8UC3(path,rgb_freeze);
+
+
+	printf_s("[+] FrameManager::SaveCalibration: Save %09d succeed.\n", calibrationCount);
+
+	calibrationCount += 1;
+
+
+
+
+
 }
 
 

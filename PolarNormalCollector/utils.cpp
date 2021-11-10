@@ -166,6 +166,15 @@ void Save32FC1(String& path, Mat& img)
 	}
 	imwrite(path, img);
 }
+void Save8UC1(String& path, Mat& img)
+{
+	if (img.type() != CV_8UC1)
+	{
+		printf_s("[-] utils::Save8UC1 Failed: Type of img is not 8UC1.\n");
+		return;
+	}
+	imwrite(path, img);
+}
 
 void Save32FC3(String& path, Mat& img)
 {

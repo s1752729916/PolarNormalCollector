@@ -32,14 +32,18 @@ public:
 	void Processing();
 	void Save();
 	void start();//开启帧管理器pipeline的线程
-
+	void SaveCalibration();//保存标定板图片，
 
 private:
 	//参数
 	bool isProcessingEnabled;
 	bool isFreeze;//这个标签位用来控制是否进入了Freeze状态，Freeze函数将该标签置真，Processing或者Capture函数将该函数置位假
-	int count;//当前计数，用于保存文件
+	int count;//当前样本计数，用于保存文件
 	std::string rootSave;//保存路径
+
+
+	int calibrationCount;//第几个标定板了
+	std::string calibrationPath; //标定板图片保存到哪里
 
 
 private:

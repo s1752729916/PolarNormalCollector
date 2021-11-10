@@ -35,12 +35,17 @@ void MainWindow::InitConnects()
         {
             pFrameManager->Save();
         });
+    connect(ui.btn_save_calibrate, &QPushButton::clicked, [&]()
+        {
+            pFrameManager->SaveCalibration();
+
+        });
     
     connect(pFrameManager->pDisplayer, &Displayer::displayImgs, [&]()
         {
             //在这个域里可以以引用的方式使用MainWindows作用于的变量
             //通过this->pFrameManager->Displayer->Imgs来得到所有需要的图像
-            
+
             if (!pFrameManager->pDisplayer->Intensity_qt.isNull())
             {
                 ui.label_Intensity->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Intensity_qt));

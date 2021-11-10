@@ -1,2 +1,6 @@
-Count = 8
-SaveRoot = F:\\Research\\DataCollector\\
+CalibrationPath = F:\\Research\\DataCollector\\calibration\\
+Count = 0
+SaveRoot = F:\\Research\\DataCollector\\samples\\
+TransformMatrix = 1,0,0,0,1,0,0,0,1
+PolarIntrinsicMatrix = 1733.887327813406,0,615.034747418339,0,1734.782097955738,527.270054305637,0,0,1
+PolarDistortionCoeffs =-0.290615926372544,0.571120032919433,0,0

@@ -21,6 +21,7 @@ void Save16UC1(String& path, Mat& img); //虽然下面四个用的代码基本相同，但是分开
 void Save8UC3(String& path, Mat& img);
 void Save32FC1(String& path, Mat& img);
 void Save32FC3(String& path, Mat& img);
+void Save8UC1(String& path, Mat& img);
 
 template<typename ... Args>
 static std::string str_format(const std::string& format, Args ... args)
