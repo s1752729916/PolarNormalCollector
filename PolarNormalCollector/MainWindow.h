@@ -13,6 +13,7 @@ public:
 private:
     void InitConnects();
     FrameManager* pFrameManager;
+    HANDLE hMutex; //用于和Displayer同步的互斥量
 
 private:
     Ui::MainWindow ui;

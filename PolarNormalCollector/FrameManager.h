@@ -52,8 +52,12 @@ private:
 	AcquireRealSense* pRealSenseAcquirer;
 	Registrar* pRegistrar;
 	Config* pConfig; //配置文件
+
+
 private:
 	std::thread processing_thread; //帧管理器pipeline所在线程句柄
+	HANDLE hMutex;//成员变量同步互斥量
+
 public://需要暴露给MainWindows连接信号槽
 	Displayer* pDisplayer;
 

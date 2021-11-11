@@ -23,6 +23,16 @@ FrameManager::FrameManager()
 	pRegistrar = new Registrar(pConfig);
 	pDisplayer = new Displayer;
 
+	//创建互斥量
+	hMutex = CreateMutexW(NULL, FALSE, L"FrameManagerMutex");
+	if (NULL == hMutex)
+	{
+		printf_s("[-] FrameManager::FrameManager: CreateMutexW failed.\n");
+	}
+
+
+
+
 	//启动子模块线程
 	pRealSenseAcquirer->start();
 	
@@ -69,70 +79,81 @@ void FrameManager::Processing()
 			//读取RealSense图像
 			pRealSenseAcquirer->GetPictures();
 
-
-
-			//配准操作(包括去畸变)
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_sum);  //先去畸变，再进行配准
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			I_sum = pRegistrar->registered_poarImg.clone();
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_0);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			I_0 = pRegistrar->registered_poarImg.clone();
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_45);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			I_45 = pRegistrar->registered_poarImg.clone();
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_90);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			I_90 = pRegistrar->registered_poarImg.clone();
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->I_135);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			I_135 = pRegistrar->registered_poarImg.clone();
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->AoLP);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			AoLP = pRegistrar->registered_poarImg.clone();
-
-
-			pRegistrar->UndistortPolarImg(pPolarAcquirer->DoLP);
-			pRegistrar->Process(pRegistrar->undistorted_polarImg);
-			DoLP = pRegistrar->registered_poarImg.clone();
-
-			rgb = pRealSenseAcquirer->raw_rgb_mat;
-			depth = pRealSenseAcquirer->filtered_depth_mat; 
-			colorDepth = pRealSenseAcquirer->color_filtered_depth;
-			normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat,pRealSenseAcquirer->GetDepthScale());
-
-			//叠加操作
-			if (isFreeze)
+			//对成员变量的操作都需要在拥有互斥量的情况下进行
+			if (hMutex != NULL)
 			{
-				//需要缓存叠加显示
-				Mat I_sum_temp;
-				Mat AoLP_temp;
-				Mat DoLP_temp;
-				Mat rgb_temp;
-				Mat depth_temp;
-				Mat colorDepth_temp;
-				Mat normal_temp;
-				addWeighted(I_sum_freeze, 0.3, I_sum, 0.7, 0, I_sum_temp);
-				addWeighted(DoLP_freeze, 0.3, DoLP, 0.7, 0, DoLP_temp);
-				addWeighted(AoLP_freeze, 0.3, AoLP, 0.7, 0, AoLP_temp);
-				addWeighted(rgb_freeze, 0.3, rgb, 0.7, 0, rgb_temp);
-				addWeighted(depth_freeze, 0.3, depth, 0.7, 0, depth_temp);
-				addWeighted(colorDepth_freeze, 0.3, colorDepth, 0.7, 0, colorDepth_temp);
-				addWeighted(normal_freeze, 0.3, normal, 0.7, 0, normal_temp);
-				pDisplayer->Display(I_sum_temp, DoLP_temp, AoLP_temp, rgb_temp, depth_temp, colorDepth_temp, normal_temp);
+				DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
+				if (mutex_state = WAIT_OBJECT_0)
+				{
+					//配准操作(包括去畸变)
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_sum);  //先去畸变，再进行配准
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					I_sum = pRegistrar->registered_poarImg.clone();
 
-			}
-			else
-			{
-				//直接显示原图
-				pDisplayer->Display(I_sum, DoLP, AoLP, rgb, depth, colorDepth, normal);
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_0);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					I_0 = pRegistrar->registered_poarImg.clone();
 
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_45);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					I_45 = pRegistrar->registered_poarImg.clone();
+
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_90);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					I_90 = pRegistrar->registered_poarImg.clone();
+
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_135);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					I_135 = pRegistrar->registered_poarImg.clone();
+
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->AoLP);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					AoLP = pRegistrar->registered_poarImg.clone();
+
+
+					pRegistrar->UndistortPolarImg(pPolarAcquirer->DoLP);
+					pRegistrar->Process(pRegistrar->undistorted_polarImg);
+					DoLP = pRegistrar->registered_poarImg.clone();
+
+					rgb = pRealSenseAcquirer->raw_rgb_mat;
+					depth = pRealSenseAcquirer->filtered_depth_mat;
+					colorDepth = pRealSenseAcquirer->color_filtered_depth;
+					normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat, pRealSenseAcquirer->GetDepthScale());
+
+					//叠加操作
+					if (isFreeze)
+					{
+						//需要缓存叠加显示
+						Mat I_sum_temp;
+						Mat AoLP_temp;
+						Mat DoLP_temp;
+						Mat rgb_temp;
+						Mat depth_temp;
+						Mat colorDepth_temp;
+						Mat normal_temp;
+						addWeighted(I_sum_freeze, 0.3, I_sum, 0.7, 0, I_sum_temp);
+						addWeighted(DoLP_freeze, 0.3, DoLP, 0.7, 0, DoLP_temp);
+						addWeighted(AoLP_freeze, 0.3, AoLP, 0.7, 0, AoLP_temp);
+						addWeighted(rgb_freeze, 0.3, rgb, 0.7, 0, rgb_temp);
+						addWeighted(depth_freeze, 0.3, depth, 0.7, 0, depth_temp);
+						addWeighted(colorDepth_freeze, 0.3, colorDepth, 0.7, 0, colorDepth_temp);
+						addWeighted(normal_freeze, 0.3, normal, 0.7, 0, normal_temp);
+						pDisplayer->Display(I_sum_temp, DoLP_temp, AoLP_temp, rgb_temp, depth_temp, colorDepth_temp, normal_temp);
+
+					}
+					else
+					{
+						//直接显示原图
+						pDisplayer->Display(I_sum, DoLP, AoLP, rgb, depth, colorDepth, normal);
+
+					}
+
+					ReleaseMutex(hMutex);
+				}
 			}
+
+
+
 
 
 		}
@@ -157,29 +178,41 @@ void FrameManager::Capture()
 		printf_s("[-] FrameManager::Capture isProcessingEnabled is false. Press Continue first\n");
 		return;
 	}
-	//TODO: 需要捕捉当前时刻状态的图片,这里捕捉图片的时候Processing线程可能正在写入这些Mat，容易造成崩溃(Freeze同理)
-	I_sum_capture = I_sum.clone();
-	I_0_capture = I_0.clone();
-	I_45_capture = I_45.clone();
-	I_90_capture = I_90.clone();
-	I_135_capture = I_135.clone();
-	AoLP_capture = AoLP.clone();
-	DoLP_capture = DoLP.clone();
-	rgb_capture = rgb.clone();
-
-	//深度和法线图使用Freeze保存的状态
-	depth_capture = depth_freeze.clone();
-	colorDepth_capture = colorDepth_freeze.clone();
-	normal_capture = normal_freeze.clone();
-
-	//TODO:Save操作
 
 
-	//恢复状态
-	isFreeze = false;
-	pRealSenseAcquirer->EnableEmitter();//开启发射器
 
-	printf_s("[+] FrameManager::Capture capture succeed\n");
+	//保证拥有互斥量的情况下进行
+	if (hMutex != NULL)
+	{
+		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
+		if (mutex_state = WAIT_OBJECT_0)
+		{
+			I_sum_capture = I_sum.clone();
+			I_0_capture = I_0.clone();
+			I_45_capture = I_45.clone();
+			I_90_capture = I_90.clone();
+			I_135_capture = I_135.clone();
+			AoLP_capture = AoLP.clone();
+			DoLP_capture = DoLP.clone();
+			rgb_capture = rgb.clone();
+
+			//深度和法线图使用Freeze保存的状态
+			depth_capture = depth_freeze.clone();
+			colorDepth_capture = colorDepth_freeze.clone();
+			normal_capture = normal_freeze.clone();
+
+			//TODO:Save操作
+
+
+			//恢复状态
+			isFreeze = false;
+			pRealSenseAcquirer->EnableEmitter();//开启发射器
+
+			printf_s("[+] FrameManager::Capture capture succeed\n");
+			ReleaseMutex(hMutex);
+		}
+	}
+
 
 	
 }
@@ -204,20 +237,33 @@ void FrameManager::Freeze()
 	//深度图已经缓存，为了不影响偏振相机，关闭RGB-D的红外发射器
 	pRealSenseAcquirer->DisableEmitter();
 
-	//保存当前状态
-	I_sum_raw = pPolarAcquirer->I_sum.clone(); //对齐之前的图像保存下来
-	I_sum_freeze = I_sum.clone();
-	I_0_freeze = I_0.clone();
-	I_45_freeze = I_45.clone();
-	I_90_freeze = I_90.clone();
-	I_135_freeze = I_135.clone();
-	AoLP_freeze = AoLP.clone();
-	DoLP_freeze = DoLP.clone();
-	rgb_freeze = rgb.clone();
-	depth_freeze = depth.clone();
-	colorDepth_freeze = colorDepth.clone();
-	normal_freeze = normal.clone();
-	printf_s("[+] FrameManager:: Freeze freeze succeed\n");
+
+	//保证拥有互斥量的情况下进行
+	if (hMutex != NULL)
+	{
+		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
+		if (mutex_state = WAIT_OBJECT_0)
+		{
+			//保存当前状态
+			I_sum_raw = pPolarAcquirer->I_sum.clone(); //对齐之前的图像保存下来
+			I_sum_freeze = I_sum.clone();
+			I_0_freeze = I_0.clone();
+			I_45_freeze = I_45.clone();
+			I_90_freeze = I_90.clone();
+			I_135_freeze = I_135.clone();
+			AoLP_freeze = AoLP.clone();
+			DoLP_freeze = DoLP.clone();
+			rgb_freeze = rgb.clone();
+			depth_freeze = depth.clone();
+			colorDepth_freeze = colorDepth.clone();
+			normal_freeze = normal.clone();
+			printf_s("[+] FrameManager:: Freeze freeze succeed\n");
+			ReleaseMutex(hMutex);
+
+		}
+	}
+
+
 
 }
 void FrameManager::RegistrationInit()
@@ -232,9 +278,21 @@ void FrameManager::RegistrationInit()
 		printf_s("[-] FrameManager::RegistrationInit isProcessingEnabled is true.\n");
 		return;
 	}
-	Mat polarImg;
-	polarImg = CV_16UC12CV_8UC1_12Bit(I_sum_raw);
-	pRegistrar->CalculateTransform(polarImg,rgb_freeze);
+	//保证拥有互斥量的情况下进行
+	if (hMutex != NULL)
+	{
+		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
+		if (mutex_state = WAIT_OBJECT_0)
+		{
+
+			Mat polarImg;
+			polarImg = CV_16UC12CV_8UC1_12Bit(I_sum_raw);
+			pRegistrar->CalculateTransform(polarImg, rgb_freeze);
+
+			ReleaseMutex(hMutex);
+		}
+	}
+
 	
 }
 
