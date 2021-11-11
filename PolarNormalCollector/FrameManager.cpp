@@ -104,7 +104,7 @@ void FrameManager::Processing()
 			rgb = pRealSenseAcquirer->raw_rgb_mat;
 			depth = pRealSenseAcquirer->filtered_depth_mat; 
 			colorDepth = pRealSenseAcquirer->color_filtered_depth;
-			normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat,pRealSenseAcquirer->GetDepthScale());//TODO：法线还未实现
+			normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat,pRealSenseAcquirer->GetDepthScale());
 
 			//叠加操作
 			if (isFreeze)
@@ -157,7 +157,7 @@ void FrameManager::Capture()
 		printf_s("[-] FrameManager::Capture isProcessingEnabled is false. Press Continue first\n");
 		return;
 	}
-	//需要捕捉当前时刻状态的图片
+	//TODO: 需要捕捉当前时刻状态的图片,这里捕捉图片的时候Processing线程可能正在写入这些Mat，容易造成崩溃(Freeze同理)
 	I_sum_capture = I_sum.clone();
 	I_0_capture = I_0.clone();
 	I_45_capture = I_45.clone();
