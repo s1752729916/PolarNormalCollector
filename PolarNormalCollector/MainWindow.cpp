@@ -60,18 +60,14 @@ void MainWindow::InitConnects()
             if (hMutex != NULL)
             {
                 DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //µÈ´ý»¥³âÁ¿
-                if (mutex_state = WAIT_OBJECT_0)
+                if (mutex_state == WAIT_OBJECT_0)
                 {
                     if (!pFrameManager->pDisplayer->Intensity_qt.isNull())
                     {
                         ui.label_Intensity->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Intensity_qt));
                         ui.label_Intensity->show();
                     }
-                    if (!pFrameManager->pDisplayer->Intensity_bright_qt.isNull())
-                    {
-                        ui.label_Intensity_bright->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Intensity_bright_qt));
-                        ui.label_Intensity_bright->show();
-                    }
+
 
                     if (!pFrameManager->pDisplayer->AoLP_qt.isNull())
                     {
@@ -90,11 +86,11 @@ void MainWindow::InitConnects()
                         ui.label_RGB->show();
                     }
 
-                    if (!pFrameManager->pDisplayer->Depth_qt.isNull())
-                    {
-                        ui.label_Depth->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Depth_qt));
-                        ui.label_Depth->show();
-                    }
+                    //if (!pFrameManager->pDisplayer->Depth_qt.isNull())
+                    //{
+                    //    ui.label_Depth->setPixmap(QPixmap::fromImage(pFrameManager->pDisplayer->Depth_qt));
+                    //    ui.label_Depth->show();
+                    //}
 
                     if (!pFrameManager->pDisplayer->colorDepth_pt.isNull())
                     {

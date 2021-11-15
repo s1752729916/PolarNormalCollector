@@ -55,7 +55,7 @@ public:
 		
 		//获取互斥量再进行操作
 		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-		if (mutex_state = WAIT_OBJECT_0)
+		if (mutex_state == WAIT_OBJECT_0)
 		{
 			CV2Qt converter;
 
@@ -64,15 +64,14 @@ public:
 			cvtColor(CV_16UC12CV_8UC1_12Bit(Intensity), Intensity_8UC3, COLOR_GRAY2RGB);
 			Intensity_qt = converter.cvMatToQImage(Intensity_8UC3);
 
-			;
-			Intensity_bright_qt = Intensity_qt;
+			
 			DoLP_qt = converter.cvMatToQImage(CV_32FC1ToCV_8UC3(DoLP));
 			AoLP_qt = converter.cvMatToQImage(CV_32FC1ToCV_8UC3(AoLP));
 
 			//RealSense的图像都是8位，不需要再转换了
 			RGB_qt = converter.cvMatToQImage(RGB);
 
-			Depth_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC3(Depth));
+			//Depth_qt = converter.cvMatToQImage(CV_16UC1ToCV_8UC3(Depth));
 			colorDepth_pt = converter.cvMatToQImage(colorDepth);
 
 

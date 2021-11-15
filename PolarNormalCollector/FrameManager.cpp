@@ -41,9 +41,33 @@ FrameManager::FrameManager()
 	isProcessingEnabled = true;
 	
 	//数据保存设置
-	rootSave = "";
+	AoLPPath= "";
+	colorDepthPath = "";
+	depthPath = "";
+	DoLPPath = "";
+	normalPath = "";
+	I_0_Path = "";
+	I_45_Path = "";
+	I_90_Path = "";
+	I_135_Path = "";
+	I_sum_Path = "";
+	rgbPath = "";
+
+	AoLPPath = pConfig->Read("AoLPPath", AoLPPath);
+	colorDepthPath = pConfig->Read("colorDepthPath", colorDepthPath);
+	depthPath = pConfig->Read("depthPath", depthPath);
+	DoLPPath = pConfig->Read("DoLPPath", DoLPPath);
+	normalPath = pConfig->Read("normalPath", normalPath);
+	I_0_Path = pConfig->Read("I_0_Path", I_0_Path);
+	I_45_Path = pConfig->Read("I_45_Path", I_45_Path);
+	I_90_Path = pConfig->Read("I_90_Path", I_90_Path);
+	I_135_Path = pConfig->Read("I_135_Path", I_135_Path);
+	I_sum_Path = pConfig->Read("I_sum_Path", I_sum_Path);
+	rgbPath = pConfig->Read("rgbPath", rgbPath);
+
+
+	//读取上次保存的数量
 	count = 0;
-	rootSave = pConfig->Read("SaveRoot",rootSave);//读取保存路径
 	count = pConfig->Read("Count",count);//读取已保存数量
 
 	//标定文件保存设置
@@ -82,8 +106,9 @@ void FrameManager::Processing()
 			//对成员变量的操作都需要在拥有互斥量的情况下进行
 			if (hMutex != NULL)
 			{
+				printf_s("[debug] Processing start\n");
 				DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-				if (mutex_state = WAIT_OBJECT_0)
+				if (mutex_state == WAIT_OBJECT_0)
 				{
 					//配准操作(包括去畸变)
 					pRegistrar->UndistortPolarImg(pPolarAcquirer->I_sum);  //先去畸变，再进行配准
@@ -115,10 +140,10 @@ void FrameManager::Processing()
 					pRegistrar->Process(pRegistrar->undistorted_polarImg);
 					DoLP = pRegistrar->registered_poarImg.clone();
 
-					rgb = pRealSenseAcquirer->raw_rgb_mat;
-					depth = pRealSenseAcquirer->filtered_depth_mat;
-					colorDepth = pRealSenseAcquirer->color_filtered_depth;
-					normal = depth2normal(pRealSenseAcquirer->filtered_depth_mat, pRealSenseAcquirer->GetDepthScale());
+					rgb = pRealSenseAcquirer->raw_rgb_mat.clone();
+					depth = pRealSenseAcquirer->filtered_depth_mat.clone();
+					colorDepth = pRealSenseAcquirer->color_filtered_depth.clone();
+					normal = depth2normal(depth, pRealSenseAcquirer->GetDepthScale());
 
 					//叠加操作
 					if (isFreeze)
@@ -149,6 +174,8 @@ void FrameManager::Processing()
 					}
 
 					ReleaseMutex(hMutex);
+					printf_s("[debug] Processing done\n");
+
 				}
 			}
 
@@ -168,24 +195,26 @@ void FrameManager::Capture()
 {
 	//这个函数是在Freeze、Continue之后，把非透物体替换成透明物体后，最后需要完成的步骤
 	//保存Freeze状态的RGB-D信息，以及当前时刻的偏振信息
-	if (!isFreeze)
-	{
-		printf_s("[-] FrameManager::Capture isFreeze is false. Press Freeze first\n");
-		return;
-	}
-	if (!isProcessingEnabled)
-	{
-		printf_s("[-] FrameManager::Capture isProcessingEnabled is false. Press Continue first\n");
-		return;
-	}
 
 
 
 	//保证拥有互斥量的情况下进行
 	if (hMutex != NULL)
 	{
+
+		if (!isFreeze)
+		{
+			printf_s("[-] FrameManager::Capture isFreeze is false. Press Freeze first\n");
+			return;
+		}
+		if (!isProcessingEnabled)
+		{
+			printf_s("[-] FrameManager::Capture isProcessingEnabled is false. Press Continue first\n");
+			return;
+		}
+
 		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-		if (mutex_state = WAIT_OBJECT_0)
+		if (mutex_state == WAIT_OBJECT_0)
 		{
 			I_sum_capture = I_sum.clone();
 			I_0_capture = I_0.clone();
@@ -230,27 +259,38 @@ void FrameManager::Continue()
 }
 void FrameManager::Freeze()
 {
-	//暂停pipeline
-	isProcessingEnabled = false; 
-	isFreeze = true; 
-	
-	//深度图已经缓存，为了不影响偏振相机，关闭RGB-D的红外发射器
-	pRealSenseAcquirer->DisableEmitter();
+
 
 
 	//保证拥有互斥量的情况下进行
 	if (hMutex != NULL)
 	{
+
+
+		printf_s("[debug] trace point0 \n");
 		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-		if (mutex_state = WAIT_OBJECT_0)
+		printf_s("[debug] trace point1 \n");
+
+		if (mutex_state == WAIT_OBJECT_0)
 		{
+			//暂停pipeline
+			isProcessingEnabled = false;
+			isFreeze = true;
+
+			//深度图已经缓存，为了不影响偏振相机，关闭RGB-D的红外发射器
+			pRealSenseAcquirer->DisableEmitter();
+
+
 			//保存当前状态
+			printf_s("[debug] trace point2 \n");
+
 			I_sum_raw = pPolarAcquirer->I_sum.clone(); //对齐之前的图像保存下来
 			I_sum_freeze = I_sum.clone();
 			I_0_freeze = I_0.clone();
 			I_45_freeze = I_45.clone();
 			I_90_freeze = I_90.clone();
 			I_135_freeze = I_135.clone();
+			printf_s("[debug] trace point3\n");
 			AoLP_freeze = AoLP.clone();
 			DoLP_freeze = DoLP.clone();
 			rgb_freeze = rgb.clone();
@@ -282,7 +322,7 @@ void FrameManager::RegistrationInit()
 	if (hMutex != NULL)
 	{
 		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-		if (mutex_state = WAIT_OBJECT_0)
+		if (mutex_state == WAIT_OBJECT_0)
 		{
 
 			Mat polarImg;
@@ -314,53 +354,53 @@ void FrameManager::Save()
 	//先保存格式为CV_16UC1的图片,I_sum,I_0,I_45,I_90,I_135,depth
 
 	path = str_format("%09d-I-Sum.png",count);
-	path = rootSave + path;
+	path = I_sum_Path + path;
 	Save16UC1(path,I_sum_capture);
 	
 
 	path = str_format("%09d-I-0.png", count);
-	path = rootSave + path;
+	path = I_0_Path + path;
 	Save16UC1(path, I_0_capture);
 
 	path = str_format("%09d-I-45.png", count);
-	path = rootSave + path;
+	path = I_45_Path + path;
 	Save16UC1(path, I_45_capture);
 
 
 	path = str_format("%09d-I-90.png", count);
-	path = rootSave + path;
+	path = I_90_Path + path;
 	Save16UC1(path, I_90_capture);
 
 
 	path = str_format("%09d-I-135.png", count);
-	path = rootSave + path;
+	path = I_135_Path + path;
 	Save16UC1(path, I_135_capture);
 
 	path = str_format("%09d-depth.png", count);
-	path = rootSave + path;
+	path = depthPath + path;
 	Save16UC1(path, depth_capture);
 
 	//保存CV_8UC3格式
 	path = str_format("%09d-RGB.png",count);
-	path = rootSave + path;
+	path = rgbPath + path;
 	Save8UC3(path,rgb_capture);
 
 	path = str_format("%09d-color-depth.png", count);
-	path = rootSave + path;
+	path = colorDepthPath + path;
 	Save8UC3(path, colorDepth_capture);
 
 	//保存CV_32FC1格式(.exr文件)：AoLP，DoLP
 	path = str_format("%09d-AoLP.exr", count);
-	path = rootSave + path;
+	path = AoLPPath + path;
 	Save32FC1(path, AoLP_capture);
 
 	path = str_format("%09d-DoLP.exr", count);
-	path = rootSave + path;
+	path = DoLPPath + path;
 	Save32FC1(path, DoLP_capture);
 
 	//保存CV_32FC3格式(.exr文件)：normals
 	path = str_format("%09d-normals.exr", count);
-	path = rootSave + path;
+	path = normalPath + path;
 	cvtColor(normal_capture, normal_capture, CV_BGR2RGB);
 	Save32FC3(path, normal_capture);
 
