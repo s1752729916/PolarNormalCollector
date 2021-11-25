@@ -19,8 +19,11 @@ Registrar::Registrar(Config* pConfig)
 	//构造函数，配置分辨率等参数
 	polarWidth = 1232;
 	polarHeight = 1028;
-	rgbWidth = 640;
-	rgbHeight = 480;
+	rgbWidth = 1280;
+	rgbHeight = 720;
+
+	desireWidth = 640;
+	desireHeight = 480;
 	
 	//棋盘格参数
 
@@ -71,9 +74,10 @@ void Registrar::CalculateTransform(Mat& polarImg, Mat& rgbImg)
 		return;
 	}
 	
-	//将分辨率统一(偏振缩小到rgb图像大小的分辨率)
+	//将分辨率统一(偏振图像和rgb图像分辨率缩放到指定大小)
 	Mat polarMat;
-	resize(polarImg,polarMat,Size(rgbWidth,rgbHeight),0,0, INTER_AREA); //缩小图像用AREA插值法
+	resize(polarImg,polarMat,Size(desireHeight, desireWidth),0,0, INTER_AREA); //缩小图像用AREA插值法
+	resize(rgbImg, rgbImg, Size(desireHeight, desireWidth), 0, 0, INTER_AREA);
 	
 	//调整偏振图像的亮度
 	//int bias = 0;
@@ -139,23 +143,42 @@ void Registrar::CalculateTransform(Mat& polarImg, Mat& rgbImg)
 
 	printf_s("[+] Registrar::CalculateTransform succeed\n");
 }
-void Registrar::Process(Mat& polarImg)
+void Registrar::Process(Mat& inputImg,bool isWrapPerspective)
 {
 	//这里输入的图像既可以是CV_16UC1，也可以是CV_8UC1
-	if (polarImg.rows != polarHeight || polarImg.cols != polarWidth)
+	if (isWrapPerspective)
 	{
-		printf_s("[-] Registrar::Process failed: polarImg size is different with polarWidth(Height)\n");
-		return;
-	}
-	//统一分辨率
-	Mat polarMat;
-	resize(polarImg, polarMat, Size(rgbWidth, rgbHeight), 0, 0, INTER_AREA); //缩小图像用AREA插值法
+		//进行透视变换，偏振图像
+		if (inputImg.rows != polarHeight || inputImg.cols != polarWidth)
+		{
+			printf_s("[-] Registrar::Process failed: polarImg size is different with polarWidth(Height)\n");
+			return;
+		}
 
-	//进行透视变换
-	warpPerspective(polarMat,registered_poarImg,transformMat, Size(polarMat.cols, polarMat.rows));
+		//统一分辨率
+		Mat polarMat;
+		resize(inputImg, polarMat, Size(desireWidth, desireHeight), 0, 0, INTER_AREA); //缩小图像用AREA插值法
+
+		//进行透视变换
+		warpPerspective(polarMat, registered_poarImg, transformMat, Size(polarMat.cols, polarMat.rows));
+
+	}
+	else
+	{
+		//不进行透视变换，RGB图像，只进行resize操作
+		if (inputImg.rows != rgbHeight || inputImg.cols != rgbWidth)
+		{
+			printf_s("[-] Registrar::Process failed: rgbImg size is different with rgbWidth(Height)\n");
+			return;
+		}
+		Mat polarMat;
+		resize(inputImg,registered_rgbImg,Size(desireWidth,desireHeight),0,0,INTER_AREA);
+	}
+
 	
 	//registered_poarImg.convertTo(registered_poarImg,registered_poarImg.type(),40,0);  //为了显示更方便
 }
+
 void Registrar::ReadConfig()
 {
 	//尝试读取配置文件中的变换矩阵

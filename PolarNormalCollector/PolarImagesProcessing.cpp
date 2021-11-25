@@ -43,7 +43,9 @@ void AcquirePolarImages::PostProcessing()
 			//保证fS1不为0
 			if (fS1 == 0.0)
 				fS1 = 1.0;
-			AoLP.at<float>(row, col) = atan(fS2/fS1)/2.0;  //单位是弧度
+			AoLP.at<float>(row, col) = (int((atan(fS2/fS1)/2.0)*180/3.1415926535)%180)*3.1415926535/180;  //单位是弧度
+			
+			
 		}
 	}
 

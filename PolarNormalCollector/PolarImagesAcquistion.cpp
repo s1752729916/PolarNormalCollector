@@ -111,7 +111,6 @@ void AcquirePolarImages::OpenShareMemory()
 
 }
 
-
 void AcquirePolarImages::CloseShareMemory()
 {
 	if (lpBase != NULL)
@@ -122,4 +121,5 @@ void AcquirePolarImages::CloseShareMemory()
 	//if (hMutex != NULL)
 	//	CloseHandle(hMutex);
 }
+
 

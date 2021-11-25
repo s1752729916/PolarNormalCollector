@@ -140,19 +140,10 @@ void FrameManager::Processing()
 					pRegistrar->Process(pRegistrar->undistorted_polarImg);
 					DoLP = pRegistrar->registered_poarImg.clone();
 
-					//rgb图像分辨率设置
-					pRegistrar->Process(pRealSenseAcquirer->raw_rgb_mat,false);
-					rgb = pRegistrar->registered_rgbImg.clone();
-
-					pRegistrar->Process(pRealSenseAcquirer->filtered_depth_mat, false);
-					GaussianBlur(pRegistrar->registered_rgbImg,depth,Size(5,5),3,3); //平滑深度图
-					depth = pRegistrar->registered_rgbImg.clone();
-
-					pRegistrar->Process(pRealSenseAcquirer->color_filtered_depth,false);
-					colorDepth = pRegistrar->registered_rgbImg.clone();
-
-					
-					GaussianBlur(depth2normal(depth, pRealSenseAcquirer->GetDepthScale()), normal, Size(5, 5), 3, 3); //平滑法线图
+					rgb = pRealSenseAcquirer->raw_rgb_mat.clone();
+					depth = pRealSenseAcquirer->filtered_depth_mat.clone();
+					colorDepth = pRealSenseAcquirer->color_filtered_depth.clone();
+					normal = depth2normal(depth, pRealSenseAcquirer->GetDepthScale());
 
 					//叠加操作
 					if (isFreeze)
@@ -276,9 +267,9 @@ void FrameManager::Freeze()
 	{
 
 
-		printf_s("[debug] trace point0 \n");
+		//printf_s("[debug] trace point0 \n");
 		DWORD mutex_state = WaitForSingleObject(hMutex, INFINITE);  //等待互斥量
-		printf_s("[debug] trace point1 \n");
+		//printf_s("[debug] trace point1 \n");
 
 		if (mutex_state == WAIT_OBJECT_0)
 		{
@@ -291,7 +282,7 @@ void FrameManager::Freeze()
 
 
 			//保存当前状态
-			printf_s("[debug] trace point2 \n");
+			//printf_s("[debug] trace point2 \n");
 
 			I_sum_raw = pPolarAcquirer->I_sum.clone(); //对齐之前的图像保存下来
 			I_sum_freeze = I_sum.clone();
@@ -299,7 +290,7 @@ void FrameManager::Freeze()
 			I_45_freeze = I_45.clone();
 			I_90_freeze = I_90.clone();
 			I_135_freeze = I_135.clone();
-			printf_s("[debug] trace point3\n");
+			//printf_s("[debug] trace point3\n");
 			AoLP_freeze = AoLP.clone();
 			DoLP_freeze = DoLP.clone();
 			rgb_freeze = rgb.clone();
@@ -462,5 +453,4 @@ FrameManager::~FrameManager()
 	delete pRegistrar;
 	delete pDisplayer;
 	delete pConfig;
-	printf_s("[+] FrameManager Exited\n");
 }

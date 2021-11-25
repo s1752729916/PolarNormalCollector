@@ -17,10 +17,10 @@ AcquireRealSense::AcquireRealSense()
 	//2、设置后处理滤波器
 
 	//-- 1、设置分辨率郎参数
-	width = 640; 
-	height = 480;
-	cfg.enable_stream(RS2_STREAM_COLOR,width, height,RS2_FORMAT_RGB8,30); //uint8 RBG格式, 30帧
-	cfg.enable_stream(RS2_STREAM_DEPTH, width, height, RS2_FORMAT_Z16, 30); //16位深度值，单位是米
+	width = 1280; 
+	height = 720;
+	cfg.enable_stream(RS2_STREAM_COLOR,width, height,RS2_FORMAT_RGB8,6); //uint8 RBG格式, 30帧
+	cfg.enable_stream(RS2_STREAM_DEPTH, width, height, RS2_FORMAT_Z16, 6); //16位深度值，单位是米
 
 	//-- 2、设置配准参数
 	align_direction = direction::to_color;//对齐到RGB相机

@@ -22,7 +22,7 @@ public:
 	Registrar();
 	Registrar(Config* pConfig);
 	~Registrar();
-	void Process(Mat& polarImg);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用，这个函数对输入格式无要求
+	void Process(Mat& polarImg, bool isWrapPerspective = true);//这个函数是已有变换矩阵后对图像流进行处理的函数，应当在主pipeline中进行调用，这个函数对输入格式无要求 第二个参数表示是否进行透视变换
 	void CalculateTransform(Mat& polarImg, Mat& rgbImg);//这个函数是用来计算两个图像之间的变换矩阵的，两张图像应包含相同的棋盘格信息,注意这里的输入偏振图像必须要转换成CV_8UC1类型
 	void ReadConfig();//读取配置文件，例如透视变换矩阵，畸变参数等等
 	void UndistortPolarImg(Mat& polarImg);//对偏振图像去畸变
@@ -34,6 +34,9 @@ private:
 	//rgb图像分辨率
 	int rgbWidth;
 	int rgbHeight;
+	//期望分辨率，将偏振图像和rgb图像都resize成desire的分辨率
+	int desireWidth = 640;
+	int desireHeight = 480;
 
 	//用于配准的棋盘格参数
 	Size boardSize;
@@ -55,7 +58,7 @@ public:
 	Mat rgbCorners;
 	//配准后的图像
 	Mat registered_poarImg; //配准过的偏振图像
-	Mat registered_rgbImg; //以rgb配准的话这个与输入的rgbImg相等
+	Mat registered_rgbImg; //以rgb配准的话这个与输入的rgbImg相等,但是分辨率不同
 
 
 
